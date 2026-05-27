@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Polityka prywatności • Lumocut</title>
+  <meta name="description" content="Polityka prywatności — Lumocut." />
+	
+  <style>
+    :root{
+      --bg0:#05050a;
+      --bg1:#0a0a12;
+
+      --stroke: rgba(255,255,255,.12);
+      --stroke2: rgba(255,255,255,.08);
+
+      --txt: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.66);
+      --muted2: rgba(255,255,255,.52);
+
+      --acc:#a855f7;
+      --acc2:#7c3aed;
+
+      --shadow2: 0 10px 30px rgba(0,0,0,.42);
+      --max: 1180px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      color: var(--txt);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 800px at 20% -10%, rgba(168,85,247,.16), transparent 62%),
+        radial-gradient(900px 700px at 80% 10%, rgba(124,58,237,.10), transparent 60%),
+        radial-gradient(1100px 900px at 50% 120%, rgba(168,85,247,.08), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.055) 1px, transparent 1px);
+      background-size: 26px 26px;
+      opacity: .18;
+      mix-blend-mode: overlay;
+      z-index:0;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    img{ display:block; max-width:100%; }
+
+    .container{
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      position: relative;
+      z-index:1;
+    }
+
+    /* ===== PANEL ===== */
+    .panel{
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(900px 380px at 18% 0%, rgba(168,85,247,.16), transparent 60%),
+        radial-gradient(900px 420px at 88% 10%, rgba(124,58,237,.13), transparent 62%),
+        rgba(255,255,255,.03);
+      box-shadow: var(--shadow2);
+      padding: 22px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(168,85,247,.10), transparent 55%),
+        radial-gradient(circle at 75% 70%, rgba(124,58,237,.08), transparent 60%);
+      filter: blur(26px);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .panel > *{ position:relative; }
+
+    /* ===== NAV (taki sam hotbar) ===== */
+    .nav{
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(var(--max), calc(100% - 24px));
+      z-index: 9999;
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: rgba(12, 12, 18, .58);
+      border: 1px solid var(--stroke);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: var(--shadow2);
+      transition: padding .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .nav.nav--scrolled{
+      padding: 8px 10px;
+      background: rgba(10,10,16,.70);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    .nav-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 200px;
+    }
+
+    .brand .avatar{
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      overflow:hidden;
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 0 0 8px rgba(168,85,247,.06);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+    }
+
+    .brand .avatar img{
+      width:100%;
+      height:100%;
+      object-fit: contain;
+      padding: 5px;
+      filter: drop-shadow(0 10px 16px rgba(168,85,247,.22));
+    }
+
+    .brand .name{
+      font-weight: 800;
+      letter-spacing: .2px;
+      opacity: .95;
+      font-size: 15px;
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content:center;
+    }
+
+    .nav-links a{
+      font-size: 13.5px;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 999px;
+      transition: transform .18s ease, background .18s ease, color .18s ease;
+    }
+
+    .nav-links a:hover{
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.9);
+      transform: translateY(-1px);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.92);
+      font-weight: 800;
+      font-size: 13.5px;
+      cursor: pointer;
+      user-select:none;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    .btn.primary{
+      background: linear-gradient(180deg, rgba(168,85,247,.95), rgba(124,58,237,.92));
+      border-color: rgba(168,85,247,.55);
+      box-shadow: 0 18px 50px rgba(168,85,247,.18);
+    }
+
+    .btn.primary:hover{
+      box-shadow: 0 22px 70px rgba(168,85,247,.22);
+    }
+
+    .top-spacer{ height: 98px; }
+
+    /* ===== CONTENT ===== */
+    main{ padding: 22px 0 54px; }
+
+    .title{
+      margin: 0 0 10px;
+      font-size: clamp(26px, 2.7vw, 34px);
+      letter-spacing: -0.4px;
+    }
+
+    .lead{
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 70ch;
+    }
+
+    .doc h2{
+      margin: 22px 0 10px;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+
+    .doc p{
+      margin: 0 0 10px;
+      color: rgba(255,255,255,.86);
+      line-height: 1.7;
+    }
+
+    .doc ul{
+      margin: 8px 0 12px 18px;
+      padding: 0;
+      color: rgba(255,255,255,.86);
+      line-height: 1.7;
+    }
+
+    .doc li{ margin: 6px 0; }
+
+    .muted{ color: var(--muted); }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      border: 1px solid rgba(168,85,247,.35);
+      background: rgba(168,85,247,.10);
+      color: rgba(255,255,255,.90);
+      box-shadow: 0 16px 45px rgba(168,85,247,.10);
+      margin: 10px 0 0;
+    }
+
+    /* ===== FOOTER ===== */
+    footer{
+      padding: 26px 0 44px;
+      position: relative;
+    }
+
+    footer::before{
+      content:"";
+      position:absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 2px;
+      background: rgba(168,85,247,.35);
+    }
+
+    .footer-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-top: 18px;
+      color: var(--muted2);
+      font-size: 13px;
+    }
+
+    .privacy{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(255,255,255,.82);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .privacy:hover{
+      transform: scale(1.05);
+      background: rgba(255,255,255,.06);
+      border-color: rgba(255,255,255,.18);
+    }
+
+    /* ===== bottom blur (jak na głównej) ===== */
+    .bottom-blur{
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 70px;
+      pointer-events: none;
+      z-index: 20;
+      background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
+      opacity: .9;
+      transition: opacity .18s ease;
+    }
+    body.at-bottom .bottom-blur{ opacity: 0; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 720px){
+      .nav-links{ display:none; }
+      .brand{ min-width: unset; }
+      .nav{ top: 10px; }
+
+      .brand .avatar{
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        width: 40px;
+        height: 40px;
+        overflow: visible;
+      }
+      .brand .avatar img{
+        padding: 0;
+        filter: drop-shadow(0 10px 18px rgba(168,85,247,.28));
+      }
+
+      .btn{ padding: 10px 12px; font-size: 13px; }
+      .container{ width: min(var(--max), calc(100% - 28px)); }
+      .panel{ padding: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="nav" id="top">
+    <div class="nav-inner">
+      <!-- logo klika i prowadzi do góry tej podstrony -->
+      <a class="brand" href="index.html" aria-label="Do góry">
+        <div class="avatar" title="Lumocut">
+          <img id="brandLogo" src="assets/logo.png" alt="Lumocut">
+        </div>
+        <div class="name">Lumocut</div>
+      </a>
+
+      <!-- linki prowadzą na stronę główną do sekcji -->
+      <div class="nav-links" aria-label="Nawigacja">
+      </div>
+
+      <div class="nav-cta">
+        <a class="btn primary" href="https://instagram.com/lumocut" target="_blank" rel="noopener">Napisz na IG</a>
+      </div>
+    </div>
+</div>
+
+  <div class="top-spacer"></div>
+
+  <main>
+    <div class="container">
+      <div class="panel">
+        <h1 class="title">Polityka prywatności</h1>
+        <p class="lead">
+          Poniżej znajdziesz zasady przetwarzania danych oraz korzystania z treści na stronie Lumocut.
+        </p>
+
+        <div class="doc">
+          <h2>Lumocut</h2>
+          <p class="muted">
+            Kontakt: <b>lumocut@gmail.com</b><br/>
+            Instagram: <b>@lumocut</b>
+          </p>
+
+          <h2>1. Informacje ogólne</h2>
+          <p>
+            Niniejsza Polityka Prywatności określa zasady przetwarzania danych osobowych oraz zasady korzystania z treści
+            dostępnych na stronie internetowej Lumocut.
+          </p>
+          <p>
+            Administratorem strony oraz danych osobowych jest: <strong>Grzegorz Korzym&nbsp;</strong><br/>
+            Kontakt: <b>lumocut@gmail.com</b><br/>
+            Kontakt przez Instagram: <b>@lumocut</b>
+          </p>
+          <p>
+            Strona ma charakter informacyjno-usługowy i prezentuje ofertę montażu wideo (short-form) oraz portfolio realizacji.
+          </p>
+
+          <h2>2. Dane osobowe</h2>
+          <p>
+            Strona nie zbiera danych osobowych automatycznie, z wyjątkiem standardowych danych technicznych (np. adres IP,
+            dane przeglądarki), które mogą być zapisywane w logach serwera w celach technicznych i bezpieczeństwa.
+          </p>
+          <p>Dane osobowe mogą być przekazywane dobrowolnie przez użytkownika wyłącznie w przypadku:</p>
+          <ul>
+            <li>kontaktu przez Instagram (DM),</li>
+            <li>kontaktu mailowego.</li>
+          </ul>
+          <p>Podane dane są wykorzystywane wyłącznie w celu:</p>
+          <ul>
+            <li>odpowiedzi na wiadomość,</li>
+            <li>realizacji współpracy,</li>
+            <li>kontaktu związanego z usługami.</li>
+          </ul>
+          <p>
+            Dane nie są przekazywane osobom trzecim ani wykorzystywane do celów marketingowych bez zgody użytkownika.
+          </p>
+
+          <h2>3. Portfolio i prawa autorskie</h2>
+          <p>
+            Wszystkie materiały wideo, animacje, montaże, grafiki oraz inne treści prezentowane na stronie (w szczególności w sekcji
+            Portfolio / Wybrane realizacje) są chronione prawem autorskim.
+          </p>
+          <p>Zabrania się w szczególności:</p>
+          <ul>
+            <li>pobierania materiałów wideo ze strony,</li>
+            <li>kopiowania, zapisywania lub rozpowszechniania filmów,</li>
+            <li>wykorzystywania materiałów do własnych projektów, reklam, social mediów lub stron internetowych,</li>
+            <li>modyfikowania, przerabiania lub ponownego publikowania treści bez zgody autora.</li>
+          </ul>
+          <p>
+            Materiały zamieszczone w portfolio służą wyłącznie do prezentacji umiejętności i stylu montażu.
+          </p>
+          <p>
+            Każde nieautoryzowane wykorzystanie materiałów stanowi naruszenie praw autorskich i może skutkować odpowiedzialnością
+            prawną zgodnie z obowiązującymi przepisami.
+          </p>
+
+          <h2>4. Wykorzystanie realizacji klientów</h2>
+          <p>Filmy prezentowane w portfolio mogą pochodzić z realizacji wykonanych dla klientów i są publikowane:</p>
+          <ul>
+            <li>za ich zgodą lub</li>
+            <li>w celach demonstracyjnych (portfolio), bez przeniesienia praw autorskich na osoby trzecie.</li>
+          </ul>
+          <p>Brak zgody na dalsze wykorzystanie materiałów przez użytkowników strony.</p>
+
+          <h2>5. Odpowiedzialność</h2>
+          <p>
+            Administrator dokłada wszelkich starań, aby treści prezentowane na stronie były aktualne i zgodne z rzeczywistością,
+            jednak nie ponosi odpowiedzialności za:
+          </p>
+          <ul>
+            <li>sposób wykorzystania informacji przez użytkowników,</li>
+            <li>szkody wynikające z nieuprawnionego użycia treści strony.</li>
+          </ul>
+
+          <h2>6. Pliki cookies</h2>
+          <p>Strona może wykorzystywać pliki cookies w celach:</p>
+          <ul>
+            <li>prawidłowego działania strony,</li>
+            <li>statystycznych i analitycznych.</li>
+          </ul>
+          <p>Użytkownik może w każdej chwili zmienić ustawienia cookies w swojej przeglądarce.</p>
+
+          <h2>7. Zmiany w polityce prywatności</h2>
+          <p>
+            Administrator zastrzega sobie prawo do wprowadzania zmian w niniejszej Polityce Prywatności.
+            Aktualna wersja dokumentu jest zawsze dostępna na stronie internetowej.
+          </p>
+
+          <h2>8. Kontakt</h2>
+          <p>
+            W sprawach związanych z polityką prywatności lub ochroną danych osobowych można skontaktować się:
+          </p>
+          <ul>
+            <li>mailowo: <b>lumocut@gmail.com</b></li>
+            <li>przez Instagram: <b>@lumocut</b></li>
+          </ul>
+
+          <div class="chip">🟣 Dokument informacyjny Lumocut</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-row">
+        <div>© 2026 Lumocut</div>
+        <a class="privacy" href="index.html">Wróć na stronę główną</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="bottom-blur" aria-hidden="true"></div>
+
+  <script>
+    // Logo fallback (różne rozszerzenia) - tak samo jak na głównej
+    (function(){
+      const img = document.getElementById('brandLogo');
+      const tries = ["assets/logo.png", "assets/logo.svg", "assets/logo.webp", "assets/logo.jpg", "assets/logo.jpeg"];
+      let i = 0;
+
+      function tryNext(){
+        i++;
+        if(i < tries.length) img.src = tries[i];
+      }
+
+      img.addEventListener('error', tryNext);
+      img.src = tries[0];
+    })();
+
+    // Nav shrink
+    const nav = document.querySelector('.nav');
+    function onScrollNav(){
+      if(window.scrollY > 16) nav.classList.add('nav--scrolled');
+      else nav.classList.remove('nav--scrolled');
+    }
+    window.addEventListener('scroll', onScrollNav, { passive:true });
+    onScrollNav();
+
+    // Bottom blur hide at very bottom
+    function onBottomBlur(){
+      const dist = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+      if(dist < 10) document.body.classList.add('at-bottom');
+      else document.body.classList.remove('at-bottom');
+    }
+    window.addEventListener('scroll', onBottomBlur, { passive:true });
+    window.addEventListener('resize', onBottomBlur);
+    onBottomBlur();
+  </script>
+
+  <!-- Google tag (gtag.js) - ładowanie po załadowaniu strony (szybszy start) -->
+  <script>
+    window.addEventListener('load', function(){
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-14Q0WVWMEP';
+      document.head.appendChild(s);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+
+      gtag('js', new Date());
+      gtag('config', 'G-14Q0WVWMEP');
+    }, { once: true });
+  </script>
+</body>
+</html>
