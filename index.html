@@ -129,6 +129,7 @@
 
 
 
+
     .panel::before{
       content:"";
       position:absolute;
@@ -3203,7 +3204,209 @@
     }
 
 
-  </style>
+  
+
+    /* ===== Vimeo custom player: ten sam wygląd, Vimeo tylko jako źródło ===== */
+    .work .thumb-inner > iframe,
+    .work .thumb-inner > .lc-vimeo-frame,
+    .work > iframe,
+    .work > .lc-vimeo-frame{
+      display:none !important;
+    }
+
+    .lc-player-shell .lc-vimeo-frame{
+      position:absolute !important;
+      inset:0 !important;
+      z-index:1 !important;
+      width:100% !important;
+      height:100% !important;
+      border-radius:inherit !important;
+      background:#000 !important;
+      overflow:hidden !important;
+    }
+    .lc-player-shell .lc-vimeo-frame iframe{
+      position:absolute !important;
+      inset:0 !important;
+      width:100% !important;
+      height:100% !important;
+      border:0 !important;
+      display:block !important;
+      background:#000 !important;
+      pointer-events:none !important;
+    }
+    .lc-click-layer{
+      position:absolute !important;
+      inset:0 !important;
+      z-index:18 !important;
+      border:0 !important;
+      padding:0 !important;
+      margin:0 !important;
+      background:transparent !important;
+      cursor:pointer !important;
+      pointer-events:auto !important;
+      touch-action:manipulation !important;
+    }
+    .lc-overlay-play{ z-index:19 !important; }
+    .lc-controls{ z-index:30 !important; }
+    .lc-player-shell.is-loading .lc-overlay-play,
+    .lc-player-shell.is-buffering .lc-overlay-play,
+    .lc-player-shell.is-quality-loading .lc-overlay-play{
+      opacity:1 !important;
+      transform:scale(1) !important;
+    }
+    .lc-player-shell.is-loading .lc-overlay-play span,
+    .lc-player-shell.is-buffering .lc-overlay-play span,
+    .lc-player-shell.is-quality-loading .lc-overlay-play span{
+      width:58px !important;
+      height:58px !important;
+      border-radius:999px !important;
+      color:transparent !important;
+      background:
+        conic-gradient(from 0deg, rgba(216,180,254,0), rgba(216,180,254,.96), rgba(96,165,250,.72), rgba(216,180,254,0)) !important;
+      border:1px solid rgba(255,255,255,.16) !important;
+      box-shadow:0 18px 46px rgba(0,0,0,.45), 0 0 32px rgba(168,85,247,.24) !important;
+      animation:lcSpin .78s linear infinite !important;
+      position:relative !important;
+    }
+    .lc-player-shell.is-loading .lc-overlay-play span::after,
+    .lc-player-shell.is-buffering .lc-overlay-play span::after,
+    .lc-player-shell.is-quality-loading .lc-overlay-play span::after{
+      content:"";
+      position:absolute;
+      inset:9px;
+      border-radius:999px;
+      background:rgba(5,5,10,.92);
+    }
+    @keyframes lcSpin{ to{ transform:rotate(360deg); } }
+
+    .lc-seek-wrap{ --seek-fill:0%; }
+    .lc-seek-fill{ width:var(--seek-fill, 0%) !important; }
+    .lc-seek-wrap::after{ left:var(--seek-fill, 0%) !important; }
+
+    .lc-actions{
+      display:flex !important;
+      align-items:center !important;
+      gap:8px !important;
+    }
+    .lc-quality-box{
+      position:relative;
+      width:44px;
+      height:44px;
+      flex:0 0 auto;
+    }
+    .lc-quality-btn{
+      font-size:11px !important;
+      font-weight:950 !important;
+      letter-spacing:.02em !important;
+    }
+    .lc-quality-box.is-disabled .lc-quality-btn{ opacity:.72; }
+    .lc-quality-pop{
+      position:absolute;
+      right:0;
+      bottom:calc(100% + 10px);
+      min-width:94px;
+      display:grid;
+      gap:5px;
+      padding:7px;
+      border-radius:16px;
+      border:1px solid rgba(216,180,254,.18);
+      background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.035)), rgba(10,10,16,.92);
+      box-shadow:0 18px 52px rgba(0,0,0,.50), inset 0 1px 0 rgba(255,255,255,.10);
+      backdrop-filter:blur(18px) saturate(1.2);
+      -webkit-backdrop-filter:blur(18px) saturate(1.2);
+      opacity:0;
+      transform:translateY(6px) scale(.98);
+      pointer-events:none;
+      transition:opacity .16s ease, transform .16s ease;
+    }
+    .lc-quality-box.open .lc-quality-pop{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      pointer-events:auto;
+    }
+    .lc-quality-pop button{
+      min-height:32px;
+      padding:7px 9px;
+      border-radius:11px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.045);
+      color:rgba(255,255,255,.84);
+      font-size:11.5px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .lc-quality-pop button:hover,
+    .lc-quality-pop button.active{
+      background:rgba(168,85,247,.22);
+      border-color:rgba(216,180,254,.28);
+      color:#fff;
+    }
+
+    .modal-card.is-vertical .lc-player-shell{
+      width:min(100%, 520px) !important;
+      height:auto !important;
+      aspect-ratio:var(--video-aspect, 9 / 16) !important;
+      min-height:0 !important;
+      max-height:calc(92vh - 176px) !important;
+      margin:0 auto !important;
+    }
+    .modal-card.is-landscape .lc-player-shell{
+      width:min(1040px, calc(100vw - 38px)) !important;
+      height:auto !important;
+      aspect-ratio:var(--video-aspect, 16 / 9) !important;
+      min-height:0 !important;
+      max-height:calc(92vh - 176px) !important;
+      margin:0 auto !important;
+    }
+    .lc-player-shell:fullscreen,
+    .lc-player-shell:-webkit-full-screen{
+      width:100vw !important;
+      height:100dvh !important;
+      max-height:none !important;
+      border-radius:0 !important;
+      background:#000 !important;
+      display:grid !important;
+      place-items:center !important;
+      aspect-ratio:auto !important;
+    }
+    .lc-player-shell:fullscreen .lc-vimeo-frame,
+    .lc-player-shell:-webkit-full-screen .lc-vimeo-frame{
+      position:absolute !important;
+      inset:0 !important;
+      width:100% !important;
+      height:100% !important;
+      border:0 !important;
+      border-radius:0 !important;
+      background:#000 !important;
+    }
+    .lc-player-shell:fullscreen .lc-controls,
+    .lc-player-shell:-webkit-full-screen .lc-controls{
+      position:absolute !important;
+      left:50% !important;
+      bottom:max(14px, env(safe-area-inset-bottom)) !important;
+      transform:translateX(-50%) !important;
+      width:min(720px, calc(100vw - 24px)) !important;
+      margin:0 auto !important;
+      background:rgba(10,10,16,.72) !important;
+      backdrop-filter:blur(18px) saturate(1.25);
+      -webkit-backdrop-filter:blur(18px) saturate(1.25);
+    }
+
+    @media (max-width:720px){
+      .modal-card.is-vertical .lc-player-shell{
+        width:min(100%, 420px) !important;
+        max-height:calc(100svh - 182px) !important;
+      }
+      .modal-card.is-landscape .lc-player-shell{
+        width:100% !important;
+        max-height:calc(100svh - 182px) !important;
+      }
+      .lc-quality-box{
+        width:38px !important;
+        height:38px !important;
+      }
+    }
+</style>
 
   <style>
     /* ===== LUMOCUT V3: MOBILE CENNIK, LOGO, RUCH I SCROLL ===== */
@@ -4579,6 +4782,33 @@
     }
   </style>
 
+
+
+<style id="lumocut-v31-lumocut-aggressive-label-fix">
+  /* V31: tylko dopisek na środkowej karcie Lumocut Style */
+  #portfolio .work[data-style="lumocut"] .lumocut-card-note{
+    display:block;
+    margin:2px 0 3px;
+    color:rgba(216,180,254,.90);
+    font-size:12.4px;
+    font-weight:950;
+    line-height:1.2;
+    letter-spacing:.01em;
+  }
+
+  #portfolio .work[data-style="lumocut"] .work-style-price span{
+    white-space:normal;
+    line-height:1.18;
+  }
+
+  @media (max-width:720px){
+    #portfolio .work[data-style="lumocut"] .lumocut-card-note{
+      margin:2px 0 2px;
+      font-size:12.1px;
+    }
+  }
+</style>
+
 </head>
 
 <body id="start">
@@ -4659,7 +4889,7 @@
           </div>
 
           <div class="portfolio-grid stagger">
-            <article class="card work" style="--i:0" tabindex="0" role="button" aria-label="Otwórz realizację 1" data-video="assets/montaz-2.mp4" data-title="CLEAN - styl clean" data-thumb="assets/montaz-zdj2" data-style="clean">
+            <article class="card work" style="--i:0" tabindex="0" role="button" aria-label="Otwórz realizację 1" data-video="assets/montaz-2.mp4" data-vimeo-id="1196112996" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" data-title="CLEAN - styl clean" data-thumb="assets/montaz-zdj2" data-style="clean">
               <div class="thumb"><div class="thumb-inner"><img class="thumb-img" alt="Miniatura realizacji 1" decoding="async" loading="lazy"></div><div class="play" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"/></svg></div></div>
               <div class="work-meta">
                 <div class="muted">Kliknij, żeby otworzyć</div><div class="mini-badge">Otwórz</div>
@@ -4667,15 +4897,15 @@
               </div>
             </article>
 
-            <article class="card work" style="--i:1" tabindex="0" role="button" aria-label="Otwórz realizację 2" data-video="assets/montaz-4.mp4" data-title="LUMOCUT STYLE - premium creator edit" data-thumb="assets/montaz-4zdj" data-style="lumocut">
+            <article class="card work" style="--i:1" tabindex="0" role="button" aria-label="Otwórz realizację 2" data-video="assets/montaz-4.mp4" data-vimeo-id="1196113020" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" data-title="LUMOCUT STYLE - premium creator edit" data-thumb="assets/montaz-4zdj" data-style="lumocut">
               <div class="thumb"><div class="thumb-inner"><img class="thumb-img" alt="Miniatura realizacji 2" decoding="async" loading="lazy"></div><div class="play" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"/></svg></div></div>
               <div class="work-meta">
-                <div class="muted">Kliknij, żeby otworzyć</div><div class="mini-badge">Otwórz</div>
-                <div class="work-pricing-row" data-style="lumocut"><div class="work-style-price"><span>Lumocut Style</span><b>od 119 zł</b></div><a class="work-price-link" href="#cennik">Zobacz cennik</a></div>
+                <div class="muted"><span class="lumocut-card-note">Napisy Aggressive</span>Kliknij, żeby otworzyć</div><div class="mini-badge">Otwórz</div>
+                <div class="work-pricing-row" data-style="lumocut"><div class="work-style-price"><span>Lumocut Style · napisy Aggressive</span><b>od 119 zł</b></div><a class="work-price-link" href="#cennik">Zobacz cennik</a></div>
               </div>
             </article>
 
-            <article class="card work" style="--i:2" tabindex="0" role="button" aria-label="Otwórz realizację 3" data-video="assets/montaz-3.mp4" data-title="AGGRESSIVE - mocny styl" data-thumb="assets/montaz-zdj3" data-style="aggressive">
+            <article class="card work" style="--i:2" tabindex="0" role="button" aria-label="Otwórz realizację 3" data-video="assets/montaz-3.mp4" data-vimeo-id="1196112999" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" data-title="AGGRESSIVE - mocny styl" data-thumb="assets/montaz-zdj3" data-style="aggressive">
               <div class="thumb"><div class="thumb-inner"><img class="thumb-img" alt="Miniatura realizacji 3" decoding="async" loading="lazy"></div><div class="play" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"/></svg></div></div>
               <div class="work-meta">
                 <div class="muted">Kliknij, żeby otworzyć</div><div class="mini-badge">Otwórz</div>
@@ -4870,7 +5100,7 @@
               <div class="spotlight"><div><div class="spot-title">🎬 Wystąpiłem w filmie na kanale <b>Huberta Misiąga</b></div><div class="spot-sub">Rola: <b>Grzegorz</b> (15-latek)</div></div></div>
               <div class="about-mini-film">
                 <div class="about-mini-line" aria-hidden="true"></div>
-                <button class="about-mini-btn" type="button" data-video-trigger data-video="assets/me-1.mp4" data-title="Krótki film o mnie" data-poster="assets/me-zdj">
+                <button class="about-mini-btn" type="button" data-video-trigger data-video="assets/me-1.mp4" data-title="Krótki film o mnie" data-poster="assets/me-zdj" data-vimeo-id="1196112985" data-vimeo-aspect="16 / 9" data-vimeo-orientation="landscape">
                   <span>Obejrzyj krótki, 2-minutowy film o mnie</span>
                   <small>(skrót z filmu)</small>
                 </button>
@@ -4962,16 +5192,18 @@
 
       <div class="modal-body lc-modal-body">
         <div class="lc-player-shell is-paused" id="lcPlayerShell">
-          <video
-            id="modalVideo"
-            playsinline
-            webkit-playsinline
-            preload="metadata"
-            controlsList="nodownload noplaybackrate noremoteplayback"
-            disablepictureinpicture>
-          </video>
-
-          <div class="lc-overlay-play" aria-hidden="true"><span>▶</span></div>
+          <div class="lc-vimeo-frame" id="vimeoFrameWrap">
+            <iframe
+              id="modalVimeo"
+              src="about:blank"
+              allow="autoplay; fullscreen; picture-in-picture; encrypted-media; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+              title="Podgląd Vimeo">
+            </iframe>
+          </div>
+          <button class="lc-click-layer" id="vimeoClickLayer" type="button" aria-label="Odtwórz / zatrzymaj"></button>
+<div class="lc-overlay-play" aria-hidden="true"><span>▶</span></div>
 
           <div class="lc-controls" id="lcControls" aria-label="Sterowanie odtwarzaczem">
             <button class="lc-btn lc-play-btn" id="playBtn" type="button" aria-label="Odtwórz / zatrzymaj">
@@ -4987,6 +5219,11 @@
             </div>
 
             <div class="lc-actions">
+              <div class="lc-quality-box" id="qualityWrap">
+                <button class="lc-btn lc-quality-btn" id="qualityBtn" type="button" aria-label="Jakość filmu">Auto</button>
+                <div class="lc-quality-pop" id="qualityPop" aria-label="Wybór jakości filmu"></div>
+              </div>
+
               <div class="lc-volume-box" id="volumeWrap">
                 <button class="lc-btn" id="muteBtn" type="button" aria-label="Głośność">
                   <svg id="volumeIconSvg" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -5043,7 +5280,643 @@
     </div>
   </div>
 
-  <script>
+  
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script id="lumocut-vimeo-custom-player-main-fix">
+  (function(){
+    const modal = document.getElementById('videoModal');
+    const modalCard = modal ? modal.querySelector('.modal-card') : null;
+    const closeBtn = document.getElementById('closeModal');
+    const titleEl = document.getElementById('modalTitle');
+    const shell = document.getElementById('lcPlayerShell');
+    const iframe = document.getElementById('modalVimeo');
+    const clickLayer = document.getElementById('vimeoClickLayer');
+    const overlayIcon = shell ? shell.querySelector('.lc-overlay-play span') : null;
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const seek = document.getElementById('seek');
+    const seekFill = document.getElementById('seekFill');
+    const timeEl = document.getElementById('time');
+    const muteBtn = document.getElementById('muteBtn');
+    const volumeWrap = document.getElementById('volumeWrap');
+    const volumePop = document.getElementById('volumePop');
+    const volume = document.getElementById('volume');
+    const qualityWrap = document.getElementById('qualityWrap');
+    const qualityBtn = document.getElementById('qualityBtn');
+    const qualityPop = document.getElementById('qualityPop');
+    const fullBtn = document.getElementById('fullBtn');
+    const nav = document.querySelector('.nav');
+    const bottomBlur = document.querySelector('.bottom-blur');
+
+    if(!modal || !modalCard || !shell || !iframe) return;
+
+    const VIMEO_BY_ASSET = {
+      'assets/montaz-1.mp4': { id:'1196112986', aspect:'9 / 16', orientation:'vertical' },
+      'assets/montaz-2.mp4': { id:'1196112996', aspect:'9 / 16', orientation:'vertical' },
+      'assets/montaz-3.mp4': { id:'1196112999', aspect:'9 / 16', orientation:'vertical' },
+      'assets/montaz-4.mp4': { id:'1196113020', aspect:'9 / 16', orientation:'vertical' },
+      'assets/montaz-5.mp4': { id:'1196113027', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-1.mp4': { id:'1196113028', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-2.mp4': { id:'1196113061', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-3.mp4': { id:'1196112900', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-4.mp4': { id:'1196112902', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-5.mp4': { id:'1196112898', aspect:'16 / 9', orientation:'landscape' },
+      'assets/video-6.mp4': { id:'1196112899', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-7.mp4': { id:'1196112929', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-8.mp4': { id:'1196112930', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-9.mp4': { id:'1196112931', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-10.mp4': { id:'1196112932', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-11.mp4': { id:'1196112943', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-12.mp4': { id:'1196112950', aspect:'16 / 9', orientation:'landscape' },
+      'assets/video-13.mp4': { id:'1196112951', aspect:'16 / 9', orientation:'landscape' },
+      'assets/video-14.mp4': { id:'1196112952', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-15.mp4': { id:'1196112959', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-16.mp4': { id:'1196112962', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-17.mp4': { id:'1196112967', aspect:'9 / 16', orientation:'vertical' },
+      'assets/video-18.mp4': { id:'1196112968', aspect:'16 / 9', orientation:'landscape' },
+      'assets/cta-1.mp4': { id:'1196112974', aspect:'9 / 16', orientation:'vertical' },
+      'assets/cta-2.mp4': { id:'1196112979', aspect:'944 / 2048', orientation:'vertical' },
+      'assets/me-1.mp4': { id:'1196112985', aspect:'16 / 9', orientation:'landscape' }
+    };
+
+    let player = null;
+    let isPlaying = false;
+    let isSeeking = false;
+    let duration = 0;
+    let controlsTimer = null;
+    let volumeTimer = null;
+    let progressTimer = null;
+    let progressBusy = false;
+    let isChangingQuality = false;
+    let toggleBusy = false;
+
+    const hasVimeoApi = () => !!(window.Vimeo && window.Vimeo.Player);
+    const isShellFullscreen = () => document.fullscreenElement === shell || document.webkitFullscreenElement === shell;
+
+    function fmt(seconds){
+      seconds = Math.max(0, Math.floor(Number(seconds) || 0));
+      const m = Math.floor(seconds / 60);
+      const s = String(seconds % 60).padStart(2, '0');
+      return m + ':' + s;
+    }
+
+    function parseRatio(aspect){
+      const parts = String(aspect || '16 / 9').split('/').map(v => Number(String(v).trim()));
+      if(parts.length === 2 && parts[0] > 0 && parts[1] > 0) return parts[0] / parts[1];
+      return 16 / 9;
+    }
+
+    function normalizeAsset(src){
+      if(!src) return '';
+      const clean = String(src).split('?')[0].split('#')[0];
+      const idx = clean.indexOf('assets/');
+      return idx >= 0 ? clean.slice(idx) : clean;
+    }
+
+    function resolveVideoData(el){
+      if(!el) return null;
+      const byAsset = VIMEO_BY_ASSET[normalizeAsset(el.dataset.video || '')];
+      const id = el.dataset.vimeoId || (byAsset && byAsset.id);
+      if(!id) return null;
+      const aspect = el.dataset.vimeoAspect || (byAsset && byAsset.aspect) || '16 / 9';
+      const orientation = el.dataset.vimeoOrientation || (byAsset && byAsset.orientation) || (parseRatio(aspect) < 1 ? 'vertical' : 'landscape');
+      return { id, aspect, orientation };
+    }
+
+    function buildVimeoSrc(id){
+      const params = new URLSearchParams({
+        autopause:'0',
+        autoplay:'0',
+        loop:'1',
+        controls:'0',
+        title:'0',
+        byline:'0',
+        portrait:'0',
+        badge:'0',
+        pip:'0',
+        dnt:'1',
+        playsinline:'1',
+        responsive:'1',
+        transparent:'0'
+      });
+      return 'https://player.vimeo.com/video/' + encodeURIComponent(id) + '?' + params.toString();
+    }
+
+    async function safePlayerCall(method, ...args){
+      if(!player || typeof player[method] !== 'function') return null;
+      try{
+        return await Promise.race([
+          player[method](...args),
+          new Promise(resolve => setTimeout(() => resolve(null), 1200))
+        ]);
+      }catch(_){ return null; }
+    }
+
+    function setSeekPercent(percent){
+      const value = Math.max(0, Math.min(100, Number(percent) || 0));
+      if(seekFill) seekFill.style.width = value + '%';
+      if(seek){
+        seek.style.setProperty('--value', value + '%');
+        const wrap = seek.closest('.lc-seek-wrap');
+        if(wrap) wrap.style.setProperty('--seek-fill', value + '%');
+      }
+    }
+
+    function setPlayerState(playing){
+      isPlaying = !!playing;
+      shell.classList.toggle('is-paused', !isPlaying);
+      shell.classList.toggle('is-playing', isPlaying);
+      if(playIcon) playIcon.textContent = isPlaying ? '❚❚' : '▶';
+      if(overlayIcon && !shell.classList.contains('is-buffering') && !shell.classList.contains('is-loading') && !shell.classList.contains('is-quality-loading')){
+        overlayIcon.textContent = isPlaying ? '❚❚' : '▶';
+      }
+    }
+
+    function setVolumeVisual(){
+      const value = Math.max(0, Math.min(1, Number(volume ? volume.value : 1) || 0));
+      if(volume) volume.style.setProperty('--vol-fill', (value * 100) + '%');
+      if(volumePop){
+        volumePop.style.setProperty('--vol-fill', (value * 100) + '%');
+        volumePop.style.setProperty('--vol-thumb-top', (18 + ((1 - value) * 118)) + 'px');
+      }
+    }
+
+    function showControls(){
+      shell.classList.remove('controls-hidden');
+      clearTimeout(controlsTimer);
+      if(isPlaying && isShellFullscreen() && !isChangingQuality){
+        controlsTimer = setTimeout(() => {
+          if(isPlaying && isShellFullscreen() && !isChangingQuality) shell.classList.add('controls-hidden');
+        }, 2100);
+      }
+    }
+
+    function closeVolume(){
+      if(!volumeWrap) return;
+      volumeWrap.classList.remove('open');
+      clearTimeout(volumeTimer);
+    }
+
+    function showVolume(){
+      if(!volumeWrap) return;
+      volumeWrap.classList.add('open');
+      setVolumeVisual();
+      clearTimeout(volumeTimer);
+      volumeTimer = setTimeout(closeVolume, 2100);
+    }
+
+    function closeQuality(){
+      if(!qualityWrap) return;
+      qualityWrap.classList.remove('open');
+    }
+
+    function setBuffering(active, qualityMode){
+      const on = !!active;
+      shell.classList.toggle('is-buffering', on);
+      shell.classList.toggle('is-quality-loading', on && !!qualityMode);
+      if(overlayIcon) overlayIcon.textContent = on ? '' : (isPlaying ? '❚❚' : '▶');
+      clearTimeout(controlsTimer);
+      if(on) shell.classList.remove('controls-hidden');
+    }
+
+    async function updateProgressNow(){
+      if(!player || isSeeking || progressBusy) return;
+      progressBusy = true;
+      try{
+        const currentRaw = await safePlayerCall('getCurrentTime');
+        const durationRaw = await safePlayerCall('getDuration');
+        const current = Math.max(0, Number(currentRaw) || 0);
+        const dur = Math.max(0, Number(durationRaw) || duration || 0);
+        duration = dur;
+        if(duration > 0){
+          const ratio = Math.max(0, Math.min(1, current / duration));
+          if(seek) seek.value = String(Math.round(ratio * 1000));
+          setSeekPercent(ratio * 100);
+          if(timeEl) timeEl.textContent = fmt(current) + ' / ' + fmt(duration);
+        }else if(timeEl){
+          timeEl.textContent = fmt(current) + ' / 0:00';
+        }
+      }finally{ progressBusy = false; }
+    }
+
+    function startProgressTimer(){
+      clearInterval(progressTimer);
+      progressTimer = setInterval(updateProgressNow, 250);
+    }
+
+    function stopProgressTimer(){
+      clearInterval(progressTimer);
+      progressTimer = null;
+      progressBusy = false;
+    }
+
+    function renderQualityOptions(items){
+      if(!qualityWrap || !qualityBtn || !qualityPop) return;
+      qualityPop.innerHTML = '';
+      const qualities = Array.isArray(items) ? items : [];
+      const usable = qualities.filter(q => q && (q.id || q.label));
+      if(!usable.length){
+        qualityBtn.textContent = 'Auto';
+        qualityWrap.classList.add('is-disabled');
+        return;
+      }
+      qualityWrap.classList.remove('is-disabled');
+      const auto = document.createElement('button');
+      auto.type = 'button';
+      auto.textContent = 'Auto';
+      auto.dataset.quality = 'auto';
+      qualityPop.appendChild(auto);
+      usable.forEach(q => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = q.label || q.id;
+        btn.dataset.quality = q.id || q.label;
+        if(q.active){
+          btn.classList.add('active');
+          qualityBtn.textContent = q.label || q.id;
+        }
+        qualityPop.appendChild(btn);
+      });
+      if(!qualityPop.querySelector('.active')) qualityBtn.textContent = 'HD';
+    }
+
+    async function refreshQualities(){
+      const qualities = await safePlayerCall('getQualities');
+      renderQualityOptions(qualities);
+    }
+
+    async function createPlayer(id){
+      if(player){
+        try{ await player.unload(); }catch(_){ }
+        player = null;
+      }
+      if(!hasVimeoApi()) throw new Error('Vimeo Player API not loaded');
+      iframe.src = buildVimeoSrc(id);
+      player = new Vimeo.Player(iframe);
+
+      player.on('loaded', async () => {
+        duration = Number(await safePlayerCall('getDuration')) || 0;
+        if(timeEl) timeEl.textContent = '0:00 / ' + fmt(duration);
+        setSeekPercent(0);
+        shell.classList.remove('is-loading');
+        setBuffering(false);
+      });
+      player.on('durationchange', async (data) => {
+        duration = Number(data && data.duration) || Number(await safePlayerCall('getDuration')) || duration || 0;
+        updateProgressNow();
+      });
+      player.on('play', () => { setBuffering(false); setPlayerState(true); startProgressTimer(); updateProgressNow(); showControls(); });
+      player.on('playing', () => { setBuffering(false); setPlayerState(true); startProgressTimer(); updateProgressNow(); showControls(); });
+      player.on('pause', () => { setPlayerState(false); updateProgressNow(); if(!isChangingQuality) shell.classList.remove('controls-hidden'); });
+      player.on('bufferstart', () => { if(isChangingQuality || shell.classList.contains('is-loading')) setBuffering(true, isChangingQuality); });
+      player.on('bufferend', () => { if(!isChangingQuality) setBuffering(false); updateProgressNow(); });
+      player.on('ended', async () => { await safePlayerCall('setCurrentTime', 0); await safePlayerCall('play'); });
+      player.on('timeupdate', (data) => {
+        duration = Number(data.duration || duration || 0);
+        if(!isSeeking && duration > 0){
+          const seconds = Number(data.seconds || 0);
+          const percent = (seconds / duration) * 100;
+          if(seek) seek.value = String(Math.round((seconds / duration) * 1000));
+          setSeekPercent(percent);
+          if(timeEl) timeEl.textContent = fmt(seconds) + ' / ' + fmt(duration);
+        }
+      });
+      player.on('volumechange', async () => {
+        const v = await safePlayerCall('getVolume');
+        if(v !== null && volume){ volume.value = String(v); setVolumeVisual(); }
+      });
+
+      await player.ready();
+      await safePlayerCall('setVolume', Number(volume ? volume.value : 1) || 1);
+      await safePlayerCall('setLoop', true);
+      await refreshQualities();
+      startProgressTimer();
+      updateProgressNow();
+    }
+
+    async function openModal(el){
+      const data = resolveVideoData(el);
+      if(!data) return;
+      if(titleEl) titleEl.textContent = el.dataset.title || 'Podgląd';
+      modalCard.classList.toggle('is-vertical', data.orientation === 'vertical');
+      modalCard.classList.toggle('is-landscape', data.orientation !== 'vertical');
+      shell.style.setProperty('--video-aspect', data.aspect);
+      shell.style.setProperty('--video-ratio', String(parseRatio(data.aspect)));
+      shell.classList.add('is-loading');
+      setBuffering(true);
+      setPlayerState(false);
+      setSeekPercent(0);
+      if(seek) seek.value = '0';
+      if(timeEl) timeEl.textContent = '0:00 / 0:00';
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+
+      try{
+        await createPlayer(data.id);
+        showControls();
+        await player.play();
+      }catch(_){
+        shell.classList.remove('is-loading');
+        setBuffering(false);
+        setPlayerState(false);
+      }
+    }
+
+    async function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      closeVolume();
+      closeQuality();
+      clearTimeout(controlsTimer);
+      stopProgressTimer();
+      if((document.fullscreenElement === shell || document.webkitFullscreenElement === shell) && document.exitFullscreen){
+        try{ await document.exitFullscreen(); }catch(_){ }
+      }
+      if(player){
+        try{ await player.pause(); }catch(_){ }
+        try{ await player.unload(); }catch(_){ }
+        player = null;
+      }
+      iframe.src = 'about:blank';
+      setPlayerState(false);
+      shell.classList.remove('is-loading','is-buffering','is-quality-loading','controls-hidden');
+    }
+
+    async function togglePlay(){
+      if(!player || isChangingQuality || toggleBusy) return;
+      toggleBusy = true;
+      closeVolume();
+      closeQuality();
+      shell.classList.remove('is-loading','is-buffering','is-quality-loading');
+      try{
+        const paused = await safePlayerCall('getPaused');
+        const shouldPlay = paused !== false;
+        if(shouldPlay){
+          if(overlayIcon) overlayIcon.textContent = '❚❚';
+          setPlayerState(true);
+          await safePlayerCall('play');
+          startProgressTimer();
+        }else{
+          if(overlayIcon) overlayIcon.textContent = '▶';
+          setPlayerState(false);
+          await safePlayerCall('pause');
+          await updateProgressNow();
+        }
+      }finally{
+        showControls();
+        setTimeout(() => { toggleBusy = false; }, 140);
+      }
+    }
+
+    function bindOpeners(){
+      const works = Array.from(document.querySelectorAll('.work'));
+      works.forEach((card, index) => {
+        card.setAttribute('tabindex', card.getAttribute('tabindex') || '0');
+        card.setAttribute('role', card.getAttribute('role') || 'button');
+        if(card.dataset.vimeoBound === '1') return;
+        card.dataset.vimeoBound = '1';
+        card.addEventListener('click', (event) => {
+          if(event.target.closest('.work-pricing-row')) return;
+          const data = resolveVideoData(card);
+          if(!data) return;
+          event.preventDefault();
+          event.stopPropagation();
+          openModal(card);
+        }, true);
+        card.addEventListener('keydown', (event) => {
+          if(event.key !== 'Enter' && event.key !== ' ') return;
+          const data = resolveVideoData(card);
+          if(!data) return;
+          event.preventDefault();
+          openModal(card);
+        }, true);
+      });
+
+      document.querySelectorAll('[data-video-trigger]').forEach(trigger => {
+        if(trigger.dataset.vimeoBound === '1') return;
+        trigger.dataset.vimeoBound = '1';
+        trigger.addEventListener('click', event => {
+          const data = resolveVideoData(trigger);
+          if(!data) return;
+          event.preventDefault();
+          event.stopPropagation();
+          openModal(trigger);
+        }, true);
+      });
+    }
+
+    window.openWorkCardByIndex = function(index){
+      bindOpeners();
+      const cards = Array.from(document.querySelectorAll('.work'));
+      const card = cards[index];
+      if(card) openModal(card);
+    };
+
+    bindOpeners();
+    window.addEventListener('load', bindOpeners, { once:true });
+    window.addEventListener('pageshow', bindOpeners);
+
+    [playBtn, clickLayer].forEach(el => {
+      if(!el) return;
+      el.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        closeVolume();
+        closeQuality();
+        togglePlay();
+      });
+    });
+
+    shell.addEventListener('click', event => {
+      if(event.target.closest('.lc-controls') || event.target.closest('.lc-volume-pop') || event.target.closest('.lc-quality-pop')) return;
+      event.preventDefault();
+      event.stopPropagation();
+      togglePlay();
+    });
+
+    if(seek){
+      seek.addEventListener('input', () => {
+        isSeeking = true;
+        const percent = Number(seek.value) / 10;
+        setSeekPercent(percent);
+        const seconds = duration * (Number(seek.value) / 1000);
+        if(timeEl) timeEl.textContent = fmt(seconds) + ' / ' + fmt(duration);
+        showControls();
+      });
+      seek.addEventListener('change', async () => {
+        const seconds = duration * (Number(seek.value) / 1000);
+        await safePlayerCall('setCurrentTime', seconds);
+        isSeeking = false;
+        showControls();
+      });
+    }
+
+    if(muteBtn){
+      muteBtn.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        showVolume();
+        showControls();
+      });
+      muteBtn.addEventListener('dblclick', async event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const current = Number(volume && volume.value || 1);
+        if(current > 0){
+          volume.dataset.beforeMute = String(current);
+          volume.value = '0';
+          await safePlayerCall('setVolume', 0);
+        }else{
+          const previous = Number(volume.dataset.beforeMute || 1) || 1;
+          volume.value = String(previous);
+          await safePlayerCall('setVolume', previous);
+        }
+        setVolumeVisual();
+        showVolume();
+      });
+    }
+
+    if(qualityBtn && qualityWrap && qualityPop){
+      qualityBtn.addEventListener('click', async event => {
+        event.preventDefault();
+        event.stopPropagation();
+        await refreshQualities();
+        qualityWrap.classList.toggle('open');
+        closeVolume();
+        showControls();
+      });
+      qualityPop.addEventListener('click', async event => {
+        const btn = event.target.closest('button[data-quality]');
+        if(!btn || isChangingQuality) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const q = btn.dataset.quality;
+        const pausedBefore = await safePlayerCall('getPaused');
+        const wasPlaying = pausedBefore === false || isPlaying;
+        const current = Number(await safePlayerCall('getCurrentTime')) || 0;
+        isChangingQuality = true;
+        closeQuality();
+        closeVolume();
+        setBuffering(true, true);
+        setPlayerState(false);
+        try{
+          await safePlayerCall('pause');
+          if(q) await safePlayerCall('setQuality', q);
+          await new Promise(resolve => setTimeout(resolve, 220));
+          if(current > 0) await safePlayerCall('setCurrentTime', current);
+          qualityBtn.textContent = btn.textContent || 'Auto';
+          Array.from(qualityPop.querySelectorAll('button')).forEach(el => el.classList.toggle('active', el === btn));
+          if(wasPlaying){ await safePlayerCall('play'); setPlayerState(true); }
+          else setPlayerState(false);
+          await updateProgressNow();
+        }finally{
+          isChangingQuality = false;
+          setBuffering(false, false);
+          shell.classList.remove('is-quality-loading');
+          showControls();
+        }
+      });
+    }
+
+    if(volume){
+      volume.addEventListener('input', async () => {
+        const value = Math.max(0, Math.min(1, Number(volume.value) || 0));
+        await safePlayerCall('setVolume', value);
+        setVolumeVisual();
+        showVolume();
+      });
+      ['pointerdown','touchstart'].forEach(name => volume.addEventListener(name, showVolume, { passive:true }));
+    }
+
+    if(volumePop && volume){
+      let volumeDragging = false;
+      const setVolumeFromPointer = async event => {
+        const rect = volumePop.getBoundingClientRect();
+        const topPad = 18;
+        const bottomPad = 18;
+        const usable = Math.max(1, rect.height - topPad - bottomPad);
+        const y = Math.max(topPad, Math.min(rect.height - bottomPad, event.clientY - rect.top));
+        const value = Math.max(0, Math.min(1, 1 - ((y - topPad) / usable)));
+        volume.value = String(value);
+        await safePlayerCall('setVolume', value);
+        setVolumeVisual();
+        showVolume();
+      };
+      volumePop.addEventListener('pointerdown', async event => {
+        event.preventDefault();
+        event.stopPropagation();
+        volumeDragging = true;
+        try{ volumePop.setPointerCapture(event.pointerId); }catch(_){ }
+        await setVolumeFromPointer(event);
+      });
+      volumePop.addEventListener('pointermove', async event => {
+        if(!volumeDragging) return;
+        event.preventDefault();
+        await setVolumeFromPointer(event);
+      });
+      ['pointerup','pointercancel','pointerleave'].forEach(name => volumePop.addEventListener(name, () => { volumeDragging = false; }));
+    }
+
+    if(fullBtn){
+      fullBtn.addEventListener('click', async event => {
+        event.stopPropagation();
+        if(document.fullscreenElement === shell){
+          if(document.exitFullscreen) await document.exitFullscreen();
+        }else if(shell.requestFullscreen){
+          await shell.requestFullscreen();
+        }else if(shell.webkitRequestFullscreen){
+          shell.webkitRequestFullscreen();
+        }
+        showControls();
+      });
+    }
+
+    ['mousemove','pointermove','touchstart','touchmove','click'].forEach(name => shell.addEventListener(name, showControls, { passive:true }));
+
+    document.addEventListener('click', event => {
+      if(volumeWrap && !volumeWrap.contains(event.target)) closeVolume();
+      if(qualityWrap && !qualityWrap.contains(event.target)) closeQuality();
+    });
+
+    if(closeBtn) closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', event => { if(event.target === modal) closeModal(); });
+
+    window.addEventListener('keydown', event => {
+      if(!modal.classList.contains('open')) return;
+      if(event.key === 'Escape') closeModal();
+      if(event.key === ' '){ event.preventDefault(); togglePlay(); }
+    });
+
+    ['fullscreenchange','webkitfullscreenchange'].forEach(name => {
+      document.addEventListener(name, () => {
+        showControls();
+        closeVolume();
+        closeQuality();
+        clearTimeout(controlsTimer);
+        if(isPlaying && isShellFullscreen() && !isChangingQuality){
+          controlsTimer = setTimeout(() => {
+            if(isPlaying && isShellFullscreen() && !isChangingQuality) shell.classList.add('controls-hidden');
+          }, 2100);
+        }
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      if(nav) nav.classList.toggle('nav--scrolled', window.scrollY > 10);
+      if(bottomBlur){
+        const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 12;
+        document.body.classList.toggle('at-bottom', atBottom);
+      }
+    }, { passive:true });
+
+    setVolumeVisual();
+  })();
+  </script>
+
+<script>
     (function(){
       const img = document.getElementById('brandLogo');
       if(!img) return;
@@ -7019,6 +7892,7 @@
 
     .nav-cta .btn.primary{
       min-height:42px !important;
+
       padding:0 18px !important;
       box-shadow:0 18px 42px rgba(168,85,247,.20), inset 0 1px 0 rgba(255,255,255,.15) !important;
     }
@@ -11693,6 +12567,7 @@
     transition:opacity .20s ease, transform .20s ease, width .20s ease, box-shadow .20s ease !important;
   }
 
+
   #cennik .clean-toggle button.active::after,
   #cennik .clean-toggle-bottom button.active::after{
     height:2px !important;
@@ -12836,6 +13711,7 @@
   .style-choice[data-v20-kind="aggressive-animated"]:hover,
   .style-choice[data-v20-kind="lumocut-aggressive-film-1"]:hover{
     transform:translateY(-3px) scale(1.018) !important;
+
     border-color:rgba(216,180,254,.34) !important;
     box-shadow:0 20px 54px rgba(168,85,247,.18), inset 0 1px 0 rgba(255,255,255,.13) !important;
   }
@@ -14207,6 +15083,212 @@
     }
   }
 </style>
+
+
+
+<style id="lumocut-vimeo-controls-visible-final-fix">
+  /* ===== FINAL: widoczne kontrolki pod filmem w modalu Vimeo ===== */
+  .modal.open{
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  .modal-card .lc-modal-body{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:12px !important;
+    min-height:0 !important;
+  }
+
+  .modal-card.is-vertical .lc-player-shell,
+  .modal-card.is-landscape .lc-player-shell{
+    overflow:visible !important;
+    margin:0 auto 66px !important;
+    max-height:calc(92svh - 240px) !important;
+  }
+
+  .lc-player-shell .lc-vimeo-frame{
+    border-radius:18px !important;
+    border:1px solid rgba(255,255,255,.10) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 18px 62px rgba(0,0,0,.34) !important;
+  }
+
+  .lc-controls{
+    position:absolute !important;
+    left:max(14px, env(safe-area-inset-left)) !important;
+    right:max(14px, env(safe-area-inset-right)) !important;
+    bottom:-58px !important;
+    z-index:90 !important;
+    opacity:1 !important;
+    visibility:visible !important;
+    transform:none !important;
+    pointer-events:auto !important;
+  }
+
+  .lc-player-shell.controls-hidden .lc-controls{
+    opacity:1 !important;
+    visibility:visible !important;
+    transform:none !important;
+    pointer-events:auto !important;
+  }
+
+  @media (max-width:720px){
+    .modal-card .lc-modal-body{
+      padding:8px !important;
+    }
+
+    .modal-card.is-vertical .lc-player-shell,
+    .modal-card.is-landscape .lc-player-shell{
+      margin:0 auto 62px !important;
+      max-height:calc(100svh - 214px) !important;
+    }
+
+    .lc-controls{
+      left:max(8px, env(safe-area-inset-left)) !important;
+      right:max(8px, env(safe-area-inset-right)) !important;
+      bottom:-56px !important;
+    }
+  }
+</style>
+
+
+
+<style id="lumocut-about-mini-button-only-final-fix">
+  /* FINAL: O mnie, zostaje tylko mały przycisk, bez miniaturki i bez osadzonego Vimeo w sekcji */
+  .about-mini-film{
+    width:min(640px, 92%) !important;
+    margin:2px auto 0 !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:10px !important;
+    min-height:auto !important;
+  }
+
+  .about-mini-film iframe,
+  .about-mini-film video,
+  .about-mini-film img,
+  .about-mini-film .lc-vimeo-frame,
+  .about-mini-film .thumb,
+  .about-mini-film .thumb-inner,
+  .about-mini-film .thumb-img,
+  .about-mini-film .play,
+  .about-mini-film .work,
+  .about-mini-film .card:not(.about-mini-btn){
+    display:none !important;
+    visibility:hidden !important;
+    width:0 !important;
+    height:0 !important;
+    min-width:0 !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    pointer-events:none !important;
+  }
+
+  .about-mini-line{
+    display:block !important;
+    width:min(420px, 92%) !important;
+    height:1px !important;
+    border-top:1px dashed rgba(216,180,254,.24) !important;
+    background:linear-gradient(90deg, transparent, rgba(216,180,254,.16), transparent) !important;
+    opacity:.95 !important;
+  }
+
+  .about-mini-btn{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:8px !important;
+    flex-wrap:wrap !important;
+    min-height:42px !important;
+    width:auto !important;
+    max-width:100% !important;
+    padding:10px 16px !important;
+    border-radius:999px !important;
+    border:1px solid rgba(216,180,254,.24) !important;
+    background:
+      radial-gradient(100px 42px at 18% 0%, rgba(216,180,254,.12), transparent 72%),
+      linear-gradient(180deg, rgba(255,255,255,.060), rgba(255,255,255,.024)) !important;
+    color:rgba(255,255,255,.90) !important;
+    cursor:pointer !important;
+    font-size:12.8px !important;
+    font-weight:850 !important;
+    box-shadow:0 12px 30px rgba(168,85,247,.10), inset 0 1px 0 rgba(255,255,255,.09) !important;
+  }
+
+  .about-mini-btn::before{
+    content:"▶" !important;
+    width:24px !important;
+    height:24px !important;
+    display:inline-grid !important;
+    place-items:center !important;
+    border-radius:999px !important;
+    background:rgba(168,85,247,.18) !important;
+    border:1px solid rgba(216,180,254,.22) !important;
+    color:#fff !important;
+    font-size:10px !important;
+    line-height:1 !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10) !important;
+  }
+
+  .about-mini-btn small{
+    color:rgba(255,255,255,.52) !important;
+    font-size:12px !important;
+    font-weight:760 !important;
+  }
+
+  .about-mini-btn:hover{
+    transform:translateY(-1px) !important;
+    border-color:rgba(216,180,254,.34) !important;
+    background:
+      radial-gradient(120px 48px at 18% 0%, rgba(216,180,254,.16), transparent 72%),
+      linear-gradient(180deg, rgba(255,255,255,.074), rgba(255,255,255,.030)) !important;
+    box-shadow:0 16px 38px rgba(168,85,247,.14), inset 0 1px 0 rgba(255,255,255,.10) !important;
+  }
+</style>
+<script id="lumocut-about-mini-button-only-final-fix-script">
+  (function(){
+    function cleanAboutMiniFilm(){
+      var wrap = document.querySelector('.about-mini-film');
+      if(!wrap) return;
+
+      var btn = wrap.querySelector('.about-mini-btn[data-video-trigger]');
+      if(!btn){
+        btn = document.createElement('button');
+        btn.className = 'about-mini-btn';
+        btn.type = 'button';
+        btn.setAttribute('data-video-trigger', '');
+        btn.setAttribute('data-video', 'assets/me-1.mp4');
+        btn.setAttribute('data-title', 'Krótki film o mnie');
+        btn.setAttribute('data-poster', 'assets/me-zdj');
+        btn.setAttribute('data-vimeo-id', '1196112985');
+        btn.setAttribute('data-vimeo-aspect', '16 / 9');
+        btn.setAttribute('data-vimeo-orientation', 'landscape');
+        btn.innerHTML = '<span>Obejrzyj krótki, 2-minutowy film o mnie</span><small>(skrót z filmu)</small>';
+      }
+
+      var line = wrap.querySelector('.about-mini-line') || document.createElement('div');
+      line.className = 'about-mini-line';
+      line.setAttribute('aria-hidden', 'true');
+
+      Array.from(wrap.children).forEach(function(child){
+        if(child !== line && child !== btn) child.remove();
+      });
+      if(line.parentNode !== wrap) wrap.prepend(line);
+      if(btn.parentNode !== wrap) wrap.appendChild(btn);
+    }
+
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', cleanAboutMiniFilm);
+    }else{
+      cleanAboutMiniFilm();
+    }
+  })();
+</script>
 
 </body>
 </html>
