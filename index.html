@@ -129,7 +129,6 @@
 
 
 
-
     .panel::before{
       content:"";
       position:absolute;
@@ -7892,7 +7891,6 @@
 
     .nav-cta .btn.primary{
       min-height:42px !important;
-
       padding:0 18px !important;
       box-shadow:0 18px 42px rgba(168,85,247,.20), inset 0 1px 0 rgba(255,255,255,.15) !important;
     }
@@ -12567,7 +12565,6 @@
     transition:opacity .20s ease, transform .20s ease, width .20s ease, box-shadow .20s ease !important;
   }
 
-
   #cennik .clean-toggle button.active::after,
   #cennik .clean-toggle-bottom button.active::after{
     height:2px !important;
@@ -13711,7 +13708,6 @@
   .style-choice[data-v20-kind="aggressive-animated"]:hover,
   .style-choice[data-v20-kind="lumocut-aggressive-film-1"]:hover{
     transform:translateY(-3px) scale(1.018) !important;
-
     border-color:rgba(216,180,254,.34) !important;
     box-shadow:0 20px 54px rgba(168,85,247,.18), inset 0 1px 0 rgba(255,255,255,.13) !important;
   }
@@ -15287,6 +15283,110 @@
     }else{
       cleanAboutMiniFilm();
     }
+  })();
+</script>
+
+
+<style id="lumocut-vimeo-thumbnails-main-final-fix">
+  /* FINAL: miniaturki portfolio brane z Vimeo, bez zależności od lokalnych plików assets */
+  #portfolio .work[data-vimeo-id] .thumb-inner{
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+  }
+
+  #portfolio .work[data-vimeo-id] .thumb-inner.has-vimeo-thumb::before{
+    opacity:0 !important;
+  }
+
+  #portfolio .work[data-vimeo-id] .thumb-inner.has-vimeo-thumb .thumb-img{
+    opacity:1 !important;
+    display:block !important;
+    visibility:visible !important;
+  }
+</style>
+<script id="lumocut-vimeo-thumbnails-main-final-fix-script">
+  (function(){
+    function fallbackThumb(id){
+      return 'https://vumbnail.com/' + encodeURIComponent(id) + '.jpg';
+    }
+
+    function setThumbUrl(card, img, inner, url){
+      if(!url) return;
+      card.dataset.vimeoThumbUrl = url;
+      inner.style.backgroundImage = 'url("' + String(url).replace(/"/g, '%22') + '")';
+      img.referrerPolicy = 'strict-origin-when-cross-origin';
+      img.decoding = 'async';
+      img.loading = 'lazy';
+      img.src = url;
+    }
+
+    function applyVimeoThumb(card, force){
+      if(!card) return;
+      var id = card.getAttribute('data-vimeo-id');
+      var img = card.querySelector('.thumb-img');
+      var inner = card.querySelector('.thumb-inner');
+      if(!id || !img || !inner) return;
+      if(!force && card.dataset.vimeoThumbApplied === '1') return;
+
+      card.dataset.vimeoThumbApplied = '1';
+      card.removeAttribute('data-thumb');
+      card.removeAttribute('data-thumbs');
+      img.removeAttribute('data-v27-thumb');
+      img.alt = img.alt || card.getAttribute('data-title') || '';
+
+      img.onload = function(){
+        inner.classList.add('has-vimeo-thumb');
+        img.style.opacity = '1';
+      };
+      img.onerror = function(){
+        if(img.dataset.vimeoFallbackTried !== '1'){
+          img.dataset.vimeoFallbackTried = '1';
+          setThumbUrl(card, img, inner, fallbackThumb(id));
+        }else{
+          inner.classList.remove('has-vimeo-thumb');
+        }
+      };
+
+      var cached = card.dataset.vimeoThumbUrl;
+      if(cached){
+        setThumbUrl(card, img, inner, cached);
+        return;
+      }
+
+      setThumbUrl(card, img, inner, fallbackThumb(id));
+
+      fetch('https://vimeo.com/api/oembed.json?url=' + encodeURIComponent('https://vimeo.com/' + id) + '&width=960')
+        .then(function(response){ return response && response.ok ? response.json() : null; })
+        .then(function(data){
+          if(data && data.thumbnail_url){
+            img.dataset.vimeoFallbackTried = '0';
+            setThumbUrl(card, img, inner, data.thumbnail_url);
+          }
+        })
+        .catch(function(){});
+    }
+
+    function applyAllVimeoThumbs(force){
+      document.querySelectorAll('#portfolio .work[data-vimeo-id]').forEach(function(card){
+        applyVimeoThumb(card, force);
+      });
+    }
+
+    function scheduleVimeoThumbs(){
+      applyAllVimeoThumbs(true);
+      setTimeout(function(){ applyAllVimeoThumbs(true); }, 120);
+      setTimeout(function(){ applyAllVimeoThumbs(true); }, 700);
+      setTimeout(function(){ applyAllVimeoThumbs(true); }, 1600);
+    }
+
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', scheduleVimeoThumbs);
+    }else{
+      scheduleVimeoThumbs();
+    }
+    window.addEventListener('load', scheduleVimeoThumbs, { once:true });
+    window.addEventListener('pageshow', scheduleVimeoThumbs);
   })();
 </script>
 
