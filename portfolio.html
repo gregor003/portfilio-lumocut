@@ -450,9 +450,8 @@
     }
     .work:hover .play{ transform:translate(-50%, -50%) scale(1.06); background:rgba(0,0,0,.46); box-shadow:0 14px 38px rgba(0,0,0,.52), 0 0 0 8px rgba(255,255,255,.035); }
 
-    .work[data-video=""] .play,
-    .work:not([data-video]) .play{ display:none; }
-    .work[data-video=""]{ cursor:default; }
+    .work:not([data-vimeo-id]) .play{ display:none; }
+    .work:not([data-vimeo-id]){ cursor:default; }
 
     .work-meta{
       flex:1 1 auto;
@@ -1627,7 +1626,7 @@
       .portfolio-grid.three-center .work.is-3d-wide{
         max-width:640px !important;
       }
-      .animations-2d-grid .work[data-video="assets/video-5.mp4"]{
+      .animations-2d-grid .work[data-key="video-5"]{
         grid-column:span 2 !important;
       }
     }
@@ -2244,20 +2243,20 @@
         max-width:1100px !important;
         align-items:center !important;
       }
-      .portfolio-grid.three-center .work[data-video="assets/video-16.mp4"]{
+      .portfolio-grid.three-center .work[data-key="video-16"]{
         max-width:none !important;
         width:100% !important;
         align-self:stretch !important;
       }
-      .portfolio-grid.three-center .work[data-video="assets/video-16.mp4"] .thumb-inner{
+      .portfolio-grid.three-center .work[data-key="video-16"] .thumb-inner{
         aspect-ratio:9 / 16 !important;
       }
-      .portfolio-grid.three-center .work[data-video="assets/video-18.mp4"]{
+      .portfolio-grid.three-center .work[data-key="video-18"]{
         max-width:520px !important;
         width:100% !important;
         align-self:center !important;
       }
-      .portfolio-grid.three-center .work[data-video="assets/video-18.mp4"] .thumb-inner{
+      .portfolio-grid.three-center .work[data-key="video-18"] .thumb-inner{
         aspect-ratio:16 / 9 !important;
       }
 
@@ -2332,21 +2331,21 @@
     }
 
     @media (max-width:720px){
-      .portfolio-grid.three-center .work[data-video="assets/video-16.mp4"]{
+      .portfolio-grid.three-center .work[data-key="video-16"]{
         display:grid !important;
         grid-template-columns:118px minmax(0, 1fr) !important;
         min-height:146px !important;
       }
-      .portfolio-grid.three-center .work[data-video="assets/video-16.mp4"] .thumb{
+      .portfolio-grid.three-center .work[data-key="video-16"] .thumb{
         height:100% !important;
         padding:10px !important;
       }
-      .portfolio-grid.three-center .work[data-video="assets/video-16.mp4"] .thumb-inner{
+      .portfolio-grid.three-center .work[data-key="video-16"] .thumb-inner{
         height:100% !important;
         min-height:126px !important;
         aspect-ratio:auto !important;
       }
-      .portfolio-grid.three-center .work[data-video="assets/video-16.mp4"] .work-meta{
+      .portfolio-grid.three-center .work[data-key="video-16"] .work-meta{
         padding:14px 12px 14px 0 !important;
         align-items:flex-start !important;
         text-align:left !important;
@@ -2421,6 +2420,8 @@
       }
       .animations-2d-grid .bottom-landscape-layout .bottom-landscape-pair{
         grid-column:1 / -1 !important;
+
+
         display:grid !important;
         grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
         gap:20px !important;
@@ -2831,7 +2832,7 @@
 
 
     /* ===== V17: video 11 obok 4 + dopięty player w jednej linii ===== */
-    .animations-2d-grid > .work[data-video="assets/video-11.mp4"]{
+    .animations-2d-grid > .work[data-key="video-11"]{
       grid-column:auto !important;
       width:100% !important;
       max-width:none !important;
@@ -3026,7 +3027,7 @@
 
 
     /* ===== V18: naprawiony player + video 11 obok 4 ===== */
-    .animations-2d-grid > .work[data-video="assets/video-11.mp4"]{
+    .animations-2d-grid > .work[data-key="video-11"]{
       grid-column:auto !important;
       width:100% !important;
       max-width:none !important;
@@ -3506,7 +3507,7 @@
       pointer-events:none !important;
     }
 
-    .animations-2d-grid > .work[data-video="assets/video-11.mp4"]{
+    .animations-2d-grid > .work[data-key="video-11"]{
       grid-column:auto !important;
       width:100% !important;
       max-width:none !important;
@@ -4076,6 +4077,7 @@
       transform-origin:center bottom !important;
       pointer-events:none !important;
       z-index:10030 !important;
+
       transition:opacity .18s ease, transform .20s cubic-bezier(.2,.8,.2,1) !important;
     }
 
@@ -4872,6 +4874,812 @@
       color:rgba(216,180,254,.68) !important;
     }
 
+
+
+    /* ===== Vimeo swap: jeden film w tym samym miejscu, bez lokalnych MP4 i bez podwójnych embedów ===== */
+    .work .thumb-img[src=""]{ opacity:0; }
+    .work.is-talk-card{
+      border-color:var(--stroke) !important;
+      background:rgba(0,0,0,.22) !important;
+      box-shadow:var(--shadow) !important;
+    }
+    .work.is-talk-card::after{ display:none !important; }
+    .lc-vimeo-frame{
+      position:absolute;
+      inset:0;
+      z-index:1;
+      width:100%;
+      height:100%;
+      background:#000;
+      overflow:hidden;
+      border-radius:inherit;
+    }
+    .lc-vimeo-frame iframe{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+      background:#000;
+      pointer-events:none;
+    }
+    .lc-click-layer{
+      position:absolute;
+      inset:0;
+      z-index:3;
+      border:0;
+      padding:0;
+      margin:0;
+      background:transparent;
+      cursor:pointer;
+    }
+    .lc-overlay-play{ z-index:4; }
+    .lc-controls{ z-index:6; }
+    .lc-player-shell.is-loading .lc-overlay-play{ opacity:.55; }
+    .lc-player-shell.is-loading .lc-overlay-play span{ opacity:.85; }
+    .more-footer{
+      position:relative;
+      z-index:1;
+      padding:28px 0 46px;
+      margin-top:8px;
+    }
+    .more-footer::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:0;
+      width:min(720px, calc(100% - 40px));
+      height:2px;
+      transform:translateX(-50%);
+      border-radius:999px;
+      background:linear-gradient(90deg, transparent, rgba(96,165,250,.42), rgba(216,180,254,.86), rgba(168,85,247,.58), transparent);
+      box-shadow:0 0 28px rgba(168,85,247,.24);
+    }
+    .more-footer-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      color:rgba(255,255,255,.52);
+      font-size:13px;
+      padding-top:16px;
+    }
+    .more-footer .privacy{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      color:rgba(255,255,255,.82);
+      transition:transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .more-footer .privacy:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.06);
+      border-color:rgba(255,255,255,.18);
+    }
+    @media (max-width:720px){
+      .more-footer-row{ justify-content:center; text-align:center; }
+    }
+
+
+
+    /* ===== FIX: Vimeo tylko jako źródło, bez podwójnych filmów w kartach ===== */
+    .work .thumb-inner > iframe,
+    .work .thumb-inner > .lc-vimeo-frame,
+    .work > iframe,
+    .work > .lc-vimeo-frame{
+      display:none !important;
+    }
+
+    .work .thumb-img{
+      opacity:0;
+      transition:opacity .2s ease, transform .28s ease, filter .28s ease;
+    }
+    .work .thumb-inner.has-thumb .thumb-img{
+      opacity:1;
+    }
+    .work .thumb-inner.has-thumb .thumb-placeholder{
+      opacity:0;
+    }
+
+    .lc-player-shell .lc-vimeo-frame{
+      position:absolute !important;
+      inset:0 !important;
+      z-index:1 !important;
+      width:100% !important;
+      height:100% !important;
+      border-radius:18px !important;
+      border:1px solid rgba(255,255,255,.10) !important;
+      background:#000 !important;
+      overflow:hidden !important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 18px 62px rgba(0,0,0,.34) !important;
+    }
+    .lc-player-shell .lc-vimeo-frame iframe{
+      position:absolute !important;
+      inset:0 !important;
+      width:100% !important;
+      height:100% !important;
+      border:0 !important;
+      display:block !important;
+      background:#000 !important;
+      pointer-events:none !important;
+    }
+
+    .more-footer::before{
+      left:0 !important;
+      right:0 !important;
+      width:100% !important;
+      max-width:none !important;
+      height:1px !important;
+      transform:none !important;
+      background:linear-gradient(90deg, transparent, rgba(168,85,247,.42), rgba(216,180,254,.58), rgba(168,85,247,.42), transparent) !important;
+      box-shadow:0 0 10px rgba(168,85,247,.12) !important;
+      opacity:.78 !important;
+    }
+
+
+
+    /* ===== VIMEO FIX: proporcje, miniaturki, progress, głośność i jakość ===== */
+    .work .thumb-inner{
+      overflow:hidden !important;
+      background:#000 !important;
+    }
+    .work[data-vimeo-orientation="vertical"]:not(.is-landscape-card) .thumb-inner{
+      aspect-ratio:9 / 16 !important;
+    }
+    .work[data-vimeo-orientation="landscape"] .thumb-inner,
+    .work.is-landscape-card .thumb-inner,
+    .work.is-wide .thumb-inner{
+      aspect-ratio:16 / 9 !important;
+    }
+    .work .thumb-img{
+      width:100% !important;
+      height:100% !important;
+      object-fit:cover !important;
+      object-position:center center !important;
+      transform:none !important;
+      scale:1 !important;
+    }
+    .work:hover .thumb-img{
+      transform:none !important;
+      filter:saturate(1.03) contrast(1.02) !important;
+    }
+
+    .modal-card.is-vertical .lc-player-shell{
+      width:min(520px, calc((100svh - 176px) * var(--video-ratio, .5625)), calc(100vw - 38px)) !important;
+      height:auto !important;
+      aspect-ratio:var(--video-aspect, 9 / 16) !important;
+      min-height:0 !important;
+      max-height:calc(100svh - 176px) !important;
+      margin:0 auto !important;
+    }
+    .modal-card.is-landscape .lc-player-shell{
+      width:min(1040px, calc(100vw - 38px)) !important;
+      height:auto !important;
+      aspect-ratio:var(--video-aspect, 16 / 9) !important;
+      min-height:0 !important;
+      max-height:calc(100svh - 176px) !important;
+      margin:0 auto !important;
+    }
+    .lc-player-shell .lc-vimeo-frame{
+      border-radius:18px !important;
+    }
+    .lc-player-shell .lc-vimeo-frame iframe{
+      width:100% !important;
+      height:100% !important;
+      border:0 !important;
+      display:block !important;
+      background:#000 !important;
+    }
+    .lc-player-shell:fullscreen .lc-vimeo-frame,
+    .lc-player-shell:-webkit-full-screen .lc-vimeo-frame{
+      position:absolute !important;
+      inset:0 !important;
+      width:100% !important;
+      height:100% !important;
+      border:0 !important;
+      border-radius:0 !important;
+      background:#000 !important;
+    }
+    .lc-player-shell:fullscreen .lc-vimeo-frame iframe,
+    .lc-player-shell:-webkit-full-screen .lc-vimeo-frame iframe{
+      width:100% !important;
+      height:100% !important;
+      border:0 !important;
+      background:#000 !important;
+    }
+
+    .lc-seek-wrap{ --seek-fill:0%; }
+    .lc-seek-fill{ width:var(--seek-fill, 0%) !important; }
+    .lc-seek-wrap::after{ left:var(--seek-fill, 0%) !important; }
+
+    .lc-actions{
+      display:flex !important;
+      align-items:center !important;
+      gap:8px !important;
+    }
+    .lc-quality-box{
+      position:relative;
+      width:44px;
+      height:44px;
+      flex:0 0 auto;
+    }
+    .lc-quality-btn{
+      font-size:11px !important;
+      font-weight:950 !important;
+      letter-spacing:.02em !important;
+    }
+    .lc-quality-box.is-disabled .lc-quality-btn{
+      opacity:.72;
+    }
+    .lc-quality-pop{
+      position:absolute;
+      right:0;
+      bottom:calc(100% + 10px);
+      min-width:94px;
+      display:grid;
+      gap:5px;
+      padding:7px;
+      border-radius:16px;
+      border:1px solid rgba(216,180,254,.18);
+      background:linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.025)), rgba(9,9,14,.88);
+      backdrop-filter:blur(18px) saturate(1.25);
+      -webkit-backdrop-filter:blur(18px) saturate(1.25);
+      box-shadow:0 18px 44px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.08);
+      opacity:0;
+      transform:translateY(8px) scale(.96);
+      pointer-events:none;
+      transition:opacity .16s ease, transform .16s ease;
+      z-index:10035;
+    }
+    .lc-quality-box.open .lc-quality-pop{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      pointer-events:auto;
+    }
+    .lc-quality-pop button{
+      min-height:32px;
+      padding:6px 10px;
+      border-radius:11px;
+      border:1px solid transparent;
+      background:transparent;
+      color:rgba(255,255,255,.80);
+      cursor:pointer;
+      font:inherit;
+      font-size:12px;
+      font-weight:880;
+      text-align:left;
+      white-space:nowrap;
+    }
+    .lc-quality-pop button:hover,
+    .lc-quality-pop button.active{
+      color:#fff;
+      border-color:rgba(216,180,254,.22);
+      background:rgba(168,85,247,.16);
+    }
+
+    #volumeWrap .lc-volume-pop{
+      pointer-events:none !important;
+      touch-action:none !important;
+    }
+    #volumeWrap.open .lc-volume-pop{
+      pointer-events:auto !important;
+    }
+    #volumeWrap .lc-volume-range,
+    #volumeWrap.open .lc-volume-range{
+      pointer-events:auto !important;
+      touch-action:none !important;
+      cursor:pointer !important;
+    }
+
+    @media (max-width:720px){
+      .modal-card.is-vertical .lc-player-shell{
+        width:min(430px, calc((100svh - 166px) * var(--video-ratio, .5625)), calc(100vw - 22px)) !important;
+        max-height:calc(100svh - 166px) !important;
+      }
+      .modal-card.is-landscape .lc-player-shell{
+        width:calc(100vw - 22px) !important;
+        max-height:calc(100svh - 166px) !important;
+      }
+      .lc-quality-box,
+      .lc-volume-box,
+      .lc-actions .lc-btn{
+        width:40px !important;
+        height:40px !important;
+      }
+      .lc-quality-pop{
+        right:-4px;
+      }
+    }
+
+
+
+    /* ===== HOTFIX: miniaturki Vimeo bez zoomu + widoczne kontrolki w modalu ===== */
+    .work[data-vimeo-orientation="vertical"]:not(.is-landscape-card) .thumb-inner{
+      background:#05050a !important;
+    }
+    .work[data-vimeo-orientation="vertical"]:not(.is-landscape-card) .thumb-img{
+      object-fit:contain !important;
+      object-position:center center !important;
+      transform:none !important;
+      scale:1 !important;
+      background:#05050a !important;
+    }
+    .work[data-vimeo-orientation="vertical"]:not(.is-landscape-card):hover .thumb-img,
+    .work:hover .thumb-img{
+      transform:none !important;
+      scale:1 !important;
+      filter:saturate(1.02) contrast(1.01) !important;
+    }
+
+    .modal-card{
+      overflow:visible !important;
+    }
+    .modal-body,
+    .lc-modal-body{
+      overflow:visible !important;
+    }
+    .lc-player-shell{
+      overflow:visible !important;
+      margin-bottom:66px !important;
+    }
+    .lc-player-shell .lc-vimeo-frame{
+      overflow:hidden !important;
+      border-radius:18px !important;
+    }
+    .lc-controls{
+      bottom:-58px !important;
+      opacity:1 !important;
+      transform:none !important;
+      pointer-events:auto !important;
+    }
+    .lc-player-shell.controls-hidden .lc-controls{
+      opacity:1 !important;
+      transform:none !important;
+      pointer-events:auto !important;
+    }
+    .lc-player-shell::after,
+    .lc-player-shell.controls-hidden::after{
+      display:none !important;
+      opacity:0 !important;
+    }
+    .lc-progress-pill{
+      min-width:0 !important;
+    }
+    .lc-seek-wrap{
+      --seek-fill:0%;
+    }
+    .lc-seek-fill{
+      width:var(--seek-fill, 0%) !important;
+    }
+    .lc-seek-wrap::after{
+      left:var(--seek-fill, 0%) !important;
+    }
+
+    .lc-player-shell:fullscreen,
+    .lc-player-shell:-webkit-full-screen{
+      overflow:hidden !important;
+      margin-bottom:0 !important;
+    }
+    .lc-player-shell:fullscreen .lc-controls,
+    .lc-player-shell:-webkit-full-screen .lc-controls{
+      bottom:max(14px, env(safe-area-inset-bottom)) !important;
+      opacity:1 !important;
+      pointer-events:auto !important;
+    }
+    .lc-player-shell:fullscreen.controls-hidden .lc-controls,
+    .lc-player-shell:-webkit-full-screen.controls-hidden .lc-controls{
+      opacity:0 !important;
+      transform:translateY(10px) !important;
+      pointer-events:none !important;
+    }
+
+    @media (max-width:720px){
+      .lc-player-shell{
+        margin-bottom:62px !important;
+      }
+      .lc-controls{
+        bottom:-54px !important;
+      }
+      .lc-player-shell:fullscreen .lc-controls,
+      .lc-player-shell:-webkit-full-screen .lc-controls{
+        bottom:max(10px, env(safe-area-inset-bottom)) !important;
+      }
+    }
+
+
+
+    /* ===== FINAL FIX: Vimeo thumb bez gigantycznego cropa + player interakcje ===== */
+    .work[data-vimeo-orientation="vertical"] .thumb-inner{
+      background:#05050a !important;
+      overflow:hidden !important;
+    }
+    .work[data-vimeo-orientation="vertical"] .thumb-inner::before{
+      content:"" !important;
+      position:absolute !important;
+      inset:-18% !important;
+      z-index:0 !important;
+      border:0 !important;
+      border-radius:inherit !important;
+      background-image:var(--thumb-bg, none) !important;
+      background-size:cover !important;
+      background-position:center center !important;
+      filter:blur(18px) saturate(1.12) brightness(.72) !important;
+      opacity:.72 !important;
+      transform:scale(1.06) !important;
+      pointer-events:none !important;
+      box-shadow:none !important;
+    }
+    .work[data-vimeo-orientation="vertical"] .thumb-inner::after{
+      z-index:2 !important;
+      background:linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.10) 42%, rgba(0,0,0,.36)) !important;
+    }
+    .work[data-vimeo-orientation="vertical"] .thumb-img{
+      position:absolute !important;
+      inset:0 !important;
+      z-index:1 !important;
+      width:100% !important;
+      height:100% !important;
+      object-fit:contain !important;
+      object-position:center center !important;
+      transform:none !important;
+      scale:1 !important;
+      background:transparent !important;
+    }
+    .work[data-vimeo-orientation="vertical"]:hover .thumb-img{
+      transform:none !important;
+      scale:1 !important;
+      filter:saturate(1.02) contrast(1.01) !important;
+    }
+    .work[data-vimeo-orientation="landscape"] .thumb-img,
+    .work.is-landscape-card .thumb-img{
+      object-fit:cover !important;
+      object-position:center center !important;
+      transform:none !important;
+    }
+    .work .thumb-inner.has-thumb .thumb-placeholder{
+      display:none !important;
+    }
+
+    .lc-click-layer{
+      display:block !important;
+      position:absolute !important;
+      inset:0 !important;
+      z-index:5 !important;
+      cursor:pointer !important;
+      pointer-events:auto !important;
+      background:transparent !important;
+    }
+    .lc-vimeo-frame{ z-index:1 !important; }
+    .lc-controls{ z-index:20 !important; }
+    .lc-quality-pop,
+    #volumeWrap .lc-volume-pop{ z-index:40 !important; }
+
+    .lc-player-shell:not(:fullscreen):not(:-webkit-full-screen).controls-hidden .lc-controls{
+      opacity:1 !important;
+      transform:none !important;
+      pointer-events:auto !important;
+    }
+    .lc-player-shell:fullscreen.controls-hidden .lc-controls,
+    .lc-player-shell:-webkit-full-screen.controls-hidden .lc-controls{
+      opacity:0 !important;
+      transform:translateY(10px) !important;
+      pointer-events:none !important;
+    }
+
+    #volumeWrap:not(.open) .lc-volume-pop{
+      opacity:0 !important;
+      pointer-events:none !important;
+    }
+    #volumeWrap.open .lc-volume-pop{
+      opacity:1 !important;
+      pointer-events:auto !important;
+    }
+
+
+    /* ===== FINAL FIX V2: modal wyżej, CTA proporcje, spinner jakości i fullscreen auto-hide ===== */
+    .modal.open{
+      align-items:flex-start !important;
+      padding-top:max(22px, env(safe-area-inset-top)) !important;
+      overflow-y:auto !important;
+    }
+    .modal-card{
+      margin:0 auto 28px !important;
+    }
+    .modal-body.lc-modal-body{
+      padding-bottom:72px !important;
+    }
+    .lc-controls{
+      bottom:-50px !important;
+    }
+
+    .work[data-key="cta-2"] .thumb-inner{
+      aspect-ratio:100 / 216.95 !important;
+    }
+    .work[data-key="cta-2"] .thumb-img{
+      object-fit:cover !important;
+      object-position:center top !important;
+    }
+    .work[data-key="cta-2"] .thumb-inner::before{
+      opacity:.34 !important;
+      filter:blur(12px) brightness(.58) !important;
+    }
+
+    .lc-player-shell.is-buffering .lc-overlay-play,
+    .lc-player-shell.is-loading .lc-overlay-play{
+      opacity:1 !important;
+      transform:scale(1) !important;
+    }
+    .lc-player-shell.is-buffering .lc-overlay-play span,
+    .lc-player-shell.is-loading .lc-overlay-play span{
+      width:58px !important;
+      height:58px !important;
+      border-radius:999px !important;
+      color:transparent !important;
+      background:
+        conic-gradient(from 0deg, rgba(216,180,254,0), rgba(216,180,254,.95), rgba(96,165,250,.70), rgba(216,180,254,0)) !important;
+      border:1px solid rgba(255,255,255,.16) !important;
+      box-shadow:0 18px 46px rgba(0,0,0,.45), 0 0 32px rgba(168,85,247,.24) !important;
+      animation:lcSpin .78s linear infinite !important;
+      position:relative !important;
+    }
+    .lc-player-shell.is-buffering .lc-overlay-play span::after,
+    .lc-player-shell.is-loading .lc-overlay-play span::after{
+      content:"";
+      position:absolute;
+      inset:7px;
+      border-radius:999px;
+      background:rgba(7,7,12,.92);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    @keyframes lcSpin{ to{ transform:rotate(360deg); } }
+
+    .lc-player-shell.is-native-fullscreen.controls-hidden .lc-controls,
+    .lc-player-shell:fullscreen.controls-hidden .lc-controls,
+    .lc-player-shell:-webkit-full-screen.controls-hidden .lc-controls{
+      opacity:0 !important;
+      transform:translateY(14px) !important;
+      pointer-events:none !important;
+    }
+    .lc-player-shell.is-native-fullscreen.controls-hidden::after,
+    .lc-player-shell:fullscreen.controls-hidden::after,
+    .lc-player-shell:-webkit-full-screen.controls-hidden::after{
+      opacity:0 !important;
+    }
+    .lc-player-shell.is-native-fullscreen .lc-controls,
+    .lc-player-shell:fullscreen .lc-controls,
+    .lc-player-shell:-webkit-full-screen .lc-controls{
+      transition:opacity .22s ease, transform .22s ease !important;
+    }
+
+    @media (max-width:720px){
+      .modal.open{
+        padding-top:max(10px, env(safe-area-inset-top)) !important;
+      }
+      .modal-body.lc-modal-body{
+        padding-bottom:66px !important;
+      }
+      .lc-controls{
+        bottom:-48px !important;
+      }
+    }
+
+
+    /* ===== FINAL V27: klik w film, spinner jakości, playhead i przycisk jakości ===== */
+    .lc-quality-box{
+      width:50px !important;
+      height:44px !important;
+      flex:0 0 50px !important;
+    }
+    .lc-quality-btn{
+      width:50px !important;
+      height:44px !important;
+      padding:0 4px !important;
+      font-size:10px !important;
+      line-height:1 !important;
+      letter-spacing:-.03em !important;
+      white-space:nowrap !important;
+      overflow:hidden !important;
+      text-overflow:clip !important;
+    }
+    .lc-click-layer{
+      z-index:18 !important;
+      pointer-events:auto !important;
+      touch-action:manipulation !important;
+    }
+    .lc-overlay-play{
+      z-index:19 !important;
+    }
+    .lc-controls{
+      z-index:30 !important;
+    }
+    .lc-vimeo-frame iframe{
+      pointer-events:none !important;
+    }
+    .lc-player-shell.is-quality-loading .lc-overlay-play,
+    .lc-player-shell.is-buffering .lc-overlay-play,
+    .lc-player-shell.is-loading .lc-overlay-play{
+      opacity:1 !important;
+      transform:scale(1) !important;
+    }
+    .lc-player-shell.is-quality-loading .lc-overlay-play span,
+    .lc-player-shell.is-buffering .lc-overlay-play span,
+    .lc-player-shell.is-loading .lc-overlay-play span{
+      width:58px !important;
+      height:58px !important;
+      border-radius:999px !important;
+      color:transparent !important;
+      background:
+        conic-gradient(from 0deg, rgba(216,180,254,0), rgba(216,180,254,.96), rgba(96,165,250,.72), rgba(216,180,254,0)) !important;
+      border:1px solid rgba(255,255,255,.16) !important;
+      box-shadow:0 18px 46px rgba(0,0,0,.45), 0 0 32px rgba(168,85,247,.24) !important;
+      animation:lcSpin .78s linear infinite !important;
+      position:relative !important;
+    }
+    .lc-player-shell.is-quality-loading .lc-overlay-play span::after,
+    .lc-player-shell.is-buffering .lc-overlay-play span::after,
+    .lc-player-shell.is-loading .lc-overlay-play span::after{
+      content:"";
+      position:absolute;
+      inset:7px;
+      border-radius:999px;
+      background:rgba(7,7,12,.94);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .lc-player-shell.is-playing:not(.is-quality-loading):not(.is-buffering):not(.is-loading) .lc-overlay-play{
+      opacity:0;
+    }
+    .lc-player-shell.is-paused:not(.is-quality-loading):not(.is-buffering):not(.is-loading) .lc-overlay-play span{
+      color:#fff !important;
+      background:rgba(0,0,0,.42) !important;
+      animation:none !important;
+    }
+    .lc-player-shell.is-paused:not(.is-quality-loading):not(.is-buffering):not(.is-loading) .lc-overlay-play span::after{
+      display:none !important;
+    }
+    @media (max-width:720px){
+      .lc-quality-box{ width:48px !important; flex-basis:48px !important; }
+      .lc-quality-btn{ width:48px !important; font-size:9.6px !important; }
+    }
+
+
+
+    /* ===== FINAL V28: głośność otwiera się do góry, bez opadania ===== */
+    #volumeWrap.lc-volume-box{
+      position:relative !important;
+      overflow:visible !important;
+    }
+
+    #volumeWrap .lc-volume-pop{
+      position:absolute !important;
+      left:50% !important;
+      right:auto !important;
+      top:auto !important;
+      bottom:calc(100% + 12px) !important;
+      width:58px !important;
+      height:154px !important;
+      padding:0 !important;
+      border-radius:999px !important;
+      transform:translateX(-50%) scaleY(.18) !important;
+      transform-origin:center bottom !important;
+      opacity:0 !important;
+      pointer-events:none !important;
+      transition:opacity .16s ease, transform .22s cubic-bezier(.18,.82,.22,1) !important;
+      will-change:opacity, transform !important;
+    }
+
+    #volumeWrap.open .lc-volume-pop{
+      opacity:1 !important;
+      transform:translateX(-50%) scaleY(1) !important;
+      pointer-events:auto !important;
+    }
+
+    #volumeWrap .lc-volume-pop::before,
+    #volumeWrap .lc-volume-pop::after,
+    #volumeWrap .lc-volume-range{
+      transform-origin:center center !important;
+    }
+
+    #volumeWrap .lc-volume-range{
+      inset:-16px !important;
+      width:calc(100% + 32px) !important;
+      height:calc(100% + 32px) !important;
+      transform:none !important;
+      opacity:0 !important;
+      pointer-events:auto !important;
+      touch-action:none !important;
+    }
+
+    @media (max-width:720px){
+      #volumeWrap .lc-volume-pop{
+        bottom:calc(100% + 10px) !important;
+        width:54px !important;
+        height:146px !important;
+      }
+    }
+
+
+    /* ===== FINAL V30: CTA pod obserwowanie, dokładne proporcje Vimeo 944x2048 ===== */
+    .work[data-key="cta-2"] .thumb-inner{
+      aspect-ratio:944 / 2048 !important;
+    }
+    .work[data-key="cta-2"] .thumb-img{
+      object-fit:cover !important;
+      object-position:center center !important;
+      transform:none !important;
+    }
+    .work[data-key="cta-2"]:hover .thumb-img{
+      transform:none !important;
+    }
+
+
+
+    /* ===== FIX: CTA pod obserwowanie, niższy player w modalu ===== */
+    .modal-card[data-active-key="cta-2"].is-vertical .lc-player-shell:not(:fullscreen):not(:-webkit-full-screen){
+      width:min(425px, calc((100svh - 318px) * var(--video-ratio, .4609375)), calc(100vw - 78px)) !important;
+      max-height:calc(100svh - 318px) !important;
+    }
+
+    @media (max-width:720px){
+      .modal-card[data-active-key="cta-2"].is-vertical .lc-player-shell:not(:fullscreen):not(:-webkit-full-screen){
+        width:min(410px, calc((100svh - 300px) * var(--video-ratio, .4609375)), calc(100vw - 42px)) !important;
+        max-height:calc(100svh - 300px) !important;
+      }
+    }
+
+
+
+    /* ===== FINAL FIX: wyśrodkowany modal + szersza miniaturka CTA obserwowanie ===== */
+    .modal.open{
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      padding-top:max(12px, env(safe-area-inset-top)) !important;
+      padding-bottom:max(12px, env(safe-area-inset-bottom)) !important;
+      overflow-y:auto !important;
+    }
+
+    .modal.open .modal-card{
+      margin:auto !important;
+    }
+
+    .portfolio-grid.two-center .work[data-key="cta-2"] .thumb-inner,
+    .work[data-key="cta-2"] .thumb-inner{
+      aspect-ratio:9 / 16 !important;
+    }
+
+    .portfolio-grid.two-center .work[data-key="cta-2"] .thumb-img,
+    .work[data-key="cta-2"] .thumb-img{
+      object-fit:cover !important;
+      object-position:center center !important;
+      transform:scaleX(1.06) !important;
+      transform-origin:center center !important;
+    }
+
+    .portfolio-grid.two-center .work[data-key="cta-2"]:hover .thumb-img,
+    .work[data-key="cta-2"]:hover .thumb-img{
+      transform:scaleX(1.06) !important;
+    }
+
+    @media (max-width:720px){
+      .modal.open{
+        align-items:center !important;
+        justify-content:center !important;
+        padding-top:max(8px, env(safe-area-inset-top)) !important;
+        padding-bottom:max(8px, env(safe-area-inset-bottom)) !important;
+      }
+
+      .modal.open .modal-card{
+        margin:auto !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -4910,11 +5718,11 @@
 <p class="section-desc">Przykłady montażu na prawdziwych materiałach: rozmowa, tempo, napisy i rytm rolki.</p>
 </div>
 <div class="portfolio-grid two-center">
-<article class="card work is-talk-card is-talk-main" data-thumbs="assets/montaz-5zdj" data-title="Montaż Talking Head · styl Lumocut · napisy Clean" data-video="assets/montaz-5.mp4" style="--i:1">
+<article class="card work is-talk-card" data-title="Montaż Talking Head · styl Lumocut · napisy Clean" data-key="montaz-5" data-vimeo-id="1196113027" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:1">
 <div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Lumocut</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div>
 <div class="work-meta"><div class="work-title"><b class="clean-title">Montaż Talking Head</b><span class="style-gradient">styl Lumocut · napisy Clean</span></div><div class="mini-badge">Otwórz</div><p class="work-desc client-copy">Talking head w stylu Lumocut z czystymi, czytelnymi napisami.</p></div>
 </article>
-<article class="card work is-talk-card is-talk-second" data-thumbs="assets/montaz-zdj1,assets/montaz-zdi1,assets/montaz-thumb1" data-title="Montaż Talking Head · styl Lumocut · napisy Aggressive" data-video="assets/montaz-1.mp4" style="--i:2">
+<article class="card work is-talk-card is-talk-second" data-title="Montaż Talking Head · styl Lumocut · napisy Aggressive" data-key="montaz-1" data-vimeo-id="1196112986" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:2">
 <div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Lumocut</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div>
 <div class="work-meta"><div class="work-title"><b class="clean-title">Montaż Talking Head</b><span class="style-gradient">styl Lumocut · napisy Aggressive</span></div><div class="mini-badge">Otwórz</div><p class="work-desc client-copy">Talking head w stylu Lumocut z mocniejszymi napisami Aggressive.</p></div>
 </article>
@@ -4930,11 +5738,11 @@
 <p class="section-desc">Przykłady krótkich momentów, które prowadzą widza do konkretnej akcji: komentarza albo obserwowania.</p>
 </div>
 <div class="portfolio-grid two-center">
-<article class="card work is-cta-card" data-thumbs="assets/cta-1zdj" data-title="CTA · komentarz" data-video="assets/cta-1.mp4" style="--i:1">
+<article class="card work is-cta-card" data-title="CTA · komentarz" data-key="cta-1" data-vimeo-id="1196112974" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:1">
 <div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">CTA</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div>
 <div class="work-meta"><div class="work-title"><b>CTA pod komentarz</b><span>wezwanie do działania</span></div><div class="mini-badge">Otwórz</div><p class="work-desc client-copy">Przykład CTA z mojej pracy, ustawiony tak, żeby naturalnie zachęcić widza do komentarza.</p></div>
 </article>
-<article class="card work is-cta-card" data-thumbs="assets/cta-2zdj" data-title="CTA · obserwowanie" data-video="assets/cta-2.mp4" style="--i:2">
+<article class="card work is-cta-card" data-title="CTA · obserwowanie" data-key="cta-2" data-vimeo-id="1196112979" data-vimeo-aspect="944 / 2048" data-vimeo-orientation="vertical" style="--i:2">
 <div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">CTA</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div>
 <div class="work-meta"><div class="work-title"><b>CTA pod obserwowanie</b><span>wezwanie do działania</span></div><div class="mini-badge">Otwórz</div><p class="work-desc client-copy">Przykład CTA pod follow, zrobiony tak, żeby lekko i jasno zachęcić do obserwowania.</p></div>
 </article>
@@ -4949,7 +5757,7 @@
 <p class="section-desc">Krótko o mnie, mojej historii i tym, czym zajmowałem się wcześniej.</p>
 </div>
 <div class="portfolio-grid center-one">
-<article class="card work is-wide is-featured-video is-landscape-card is-about-card is-youtube-card" data-thumbs="assets/me-zdj,assets/me-zdj1,assets/me-thumb" data-title="Poznaj mnie lepiej" data-video="assets/me-1.mp4" style="--i:1">
+<article class="card work is-wide is-featured-video is-landscape-card is-about-card is-youtube-card" data-title="Poznaj mnie lepiej" data-key="me-1" data-vimeo-id="1196112985" data-vimeo-aspect="16 / 9" data-vimeo-orientation="landscape" style="--i:1">
 <div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">O mnie</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div>
 <div class="work-meta"><div class="work-title"><b>Poznaj mnie lepiej</b><span>krótko o mnie</span></div><div class="mini-badge">Otwórz</div><p class="work-desc client-copy">Krótko o mnie, wcześniejszych działaniach i historii przed Lumocut.</p></div>
 </article>
@@ -4964,15 +5772,15 @@
 <p class="section-desc">Przykłady animacji 3D, które dodają rolce przestrzeni i mocniejszego efektu wizualnego.</p>
 </div>
 <div class="portfolio-grid three-center">
-<article class="card work" data-thumbs="assets/video-zdj14,assets/zdjmin14,assets/thumb-14" data-title="Animacja 3D" data-video="assets/video-14.mp4" style="--i:1">
+<article class="card work" data-title="Animacja 3D" data-key="video-14" data-vimeo-id="1196112952" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:1">
 <div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">3D</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div>
 <div class="work-meta"><div class="work-title"><b>Animacja 3D</b><span>Motion design</span></div><div class="mini-badge">Otwórz</div></div>
 </article>
-<article class="card work" data-thumbs="assets/video-zdj16,assets/zdjmin16,assets/thumb-16" data-title="Animacja 3D" data-video="assets/video-16.mp4" style="--i:2">
+<article class="card work" data-title="Animacja 3D" data-key="video-16" data-vimeo-id="1196112962" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:2">
 <div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">3D</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div>
 <div class="work-meta"><div class="work-title"><b>Animacja 3D</b><span>Motion design</span></div><div class="mini-badge">Otwórz</div></div>
 </article>
-<article class="card work is-landscape-card is-3d-wide" data-thumbs="assets/video-zdj18,assets/zdjmin18,assets/thumb-18" data-title="Animacja 3D" data-video="assets/video-18.mp4" style="--i:3">
+<article class="card work is-landscape-card is-3d-wide" data-title="Animacja 3D" data-key="video-18" data-vimeo-id="1196112968" data-vimeo-aspect="16 / 9" data-vimeo-orientation="landscape" style="--i:3">
 <div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">3D</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div>
 <div class="work-meta"><div class="work-title"><b>Animacja 3D</b><span>Motion design</span></div><div class="mini-badge">Otwórz</div></div>
 </article>
@@ -4987,24 +5795,24 @@
 <p class="section-desc">Animacje, napisy i elementy graficzne dopasowane do klimatu rolki.</p>
 </div>
 <div class="portfolio-grid animations-2d-grid">
-<article class="card work" data-thumbs="assets/zdjmin2,assets/video-zdj2,assets/thumb-2" data-title="Animacja 2D" data-video="assets/video-2.mp4" style="--i:1"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work is-plus-3d" data-thumbs="assets/zdjmin6,assets/video-zdj6,assets/thumb-6" data-title="Motion design + 3D" data-video="assets/video-6.mp4" style="--i:2"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja + końcówka 3D</span></div><div class="mini-badge gold">Plus 3D</div><p class="work-desc client-copy">Na końcu pojawia się fragment 3D.</p></div></article>
-<article class="card work" data-thumbs="assets/zdjmin1,assets/video-zdj1,assets/thumb-1" data-title="Animacja 2D" data-video="assets/video-1.mp4" style="--i:3"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin8,assets/video-zdj8,assets/thumb-8" data-title="Animacja 2D" data-video="assets/video-8.mp4" style="--i:4"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin10,assets/video-zdj10,assets/thumb-10" data-title="Animacja 2D" data-video="assets/video-10.mp4" style="--i:5"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin7,assets/video-zdj7,assets/thumb-7" data-title="Animacja 2D" data-video="assets/video-7.mp4" style="--i:6"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin3,assets/video-zdj3,assets/thumb-3" data-title="Animacja 2D" data-video="assets/video-3.mp4" style="--i:7"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin17,assets/video-zdj17,assets/thumb-17" data-title="Animacja 2D" data-video="assets/video-17.mp4" style="--i:8"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin9,assets/video-zdj9,assets/thumb-9" data-title="Animacja 2D" data-video="assets/video-9.mp4" style="--i:9"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin15,assets/video-zdj15,assets/thumb-15" data-title="Animacja 2D" data-video="assets/video-15.mp4" style="--i:10"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin4,assets/video-zdj4,assets/thumb-4" data-title="Animacja 2D" data-video="assets/video-4.mp4" style="--i:11"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work" data-thumbs="assets/zdjmin11,assets/video-zdj11,assets/thumb-11" data-title="Animacja 2D" data-video="assets/video-11.mp4" style="--i:12"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-2" data-vimeo-id="1196113061" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:1"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work is-plus-3d" data-title="Motion design + 3D" data-key="video-6" data-vimeo-id="1196112899" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:2"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja + końcówka 3D</span></div><div class="mini-badge gold">Plus 3D</div><p class="work-desc client-copy">Na końcu pojawia się fragment 3D.</p></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-1" data-vimeo-id="1196113028" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:3"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-8" data-vimeo-id="1196112930" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:4"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-10" data-vimeo-id="1196112932" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:5"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-7" data-vimeo-id="1196112929" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:6"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-3" data-vimeo-id="1196112900" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:7"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-17" data-vimeo-id="1196112967" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:8"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-9" data-vimeo-id="1196112931" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:9"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-15" data-vimeo-id="1196112959" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:10"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-4" data-vimeo-id="1196112902" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:11"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work" data-title="Animacja 2D" data-key="video-11" data-vimeo-id="1196112943" data-vimeo-aspect="9 / 16" data-vimeo-orientation="vertical" style="--i:12"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
 <div aria-label="Końcowe animacje 16:9" class="bottom-landscape-layout">
 <div aria-label="Górne animacje 16:9" class="bottom-landscape-pair">
-<article class="card work is-wide is-landscape-card is-2d-landscape is-bottom-landscape is-bottom-start" data-thumbs="assets/zdjmin12,assets/video-zdj12,assets/thumb-12" data-title="Animacja 2D" data-video="assets/video-12.mp4" style="--i:13"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
-<article class="card work is-wide is-landscape-card is-2d-landscape is-bottom-landscape is-bottom-end" data-thumbs="assets/zdjmin5,assets/video-zdj5,assets/thumb-5" data-title="Animacja 2D" data-video="assets/video-5.mp4" style="--i:14"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work is-wide is-landscape-card is-2d-landscape is-bottom-landscape is-bottom-start" data-title="Animacja 2D" data-key="video-12" data-vimeo-id="1196112950" data-vimeo-aspect="16 / 9" data-vimeo-orientation="landscape" style="--i:13"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work is-wide is-landscape-card is-2d-landscape is-bottom-landscape is-bottom-end" data-title="Animacja 2D" data-key="video-5" data-vimeo-id="1196112898" data-vimeo-aspect="16 / 9" data-vimeo-orientation="landscape" style="--i:14"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
 </div>
-<article class="card work is-wide is-landscape-card is-2d-landscape is-bottom-landscape is-final-wide-main" data-thumbs="assets/zdjmin13,assets/video-zdj13,assets/thumb-13" data-title="Animacja 2D" data-video="assets/video-13.mp4" style="--i:15"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
+<article class="card work is-wide is-landscape-card is-2d-landscape is-bottom-landscape is-final-wide-main" data-title="Animacja 2D" data-key="video-13" data-vimeo-id="1196112951" data-vimeo-aspect="16 / 9" data-vimeo-orientation="landscape" style="--i:15"><div class="thumb"><div class="thumb-inner"><div class="thumb-placeholder">Animacja</div><img alt="" class="thumb-img" decoding="async" loading="lazy"/></div><div aria-hidden="true" class="play"><svg fill="none" height="20" viewbox="0 0 24 24" width="20"><path d="M9 7.5v9l8-4.5-8-4.5Z" fill="white"></path></svg></div></div><div class="work-meta"><div class="work-title"><b>Motion design</b><span>Animacja</span></div><div class="mini-badge">Otwórz</div></div></article>
 </div></div>
 <div class="actions">
 <a class="btn" href="index.html">Wróć do portfolio</a>
@@ -5013,6 +5821,15 @@
 </div>
 </section>
 </main>
+<footer class="more-footer">
+  <div class="container">
+    <div class="more-footer-row">
+      <div>© 2026 Lumocut</div>
+      <a class="privacy" href="polityka-prywatnosci.html">Polityka prywatności</a>
+    </div>
+  </div>
+</footer>
+
 <div aria-hidden="true" class="bottom-blur"></div>
 
 <div class="modal" id="videoModal" aria-hidden="true">
@@ -5024,14 +5841,17 @@
 
     <div class="modal-body lc-modal-body">
       <div class="lc-player-shell is-paused" id="lcPlayerShell">
-        <video
-          id="modalVideo"
-          playsinline
-          webkit-playsinline
-          preload="metadata"
-          controlsList="nodownload noplaybackrate noremoteplayback"
-          disablepictureinpicture>
-        </video>
+        <div class="lc-vimeo-frame" id="vimeoFrameWrap">
+          <iframe
+            id="modalVimeo"
+            src="about:blank"
+            allow="autoplay; fullscreen; picture-in-picture; encrypted-media; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            title="Podgląd Vimeo">
+          </iframe>
+        </div>
+        <button class="lc-click-layer" id="vimeoClickLayer" type="button" aria-label="Odtwórz / zatrzymaj"></button>
 
         <div class="lc-overlay-play" aria-hidden="true"><span>▶</span></div>
 
@@ -5049,6 +5869,10 @@
           </div>
 
           <div class="lc-actions">
+            <div class="lc-quality-box" id="qualityWrap">
+              <button class="lc-btn lc-quality-btn" id="qualityBtn" type="button" aria-label="Jakość filmu">HD</button>
+              <div class="lc-quality-pop" id="qualityPop" aria-label="Wybór jakości filmu"></div>
+            </div>
             <div class="lc-volume-box" id="volumeWrap">
               <button class="lc-btn" id="muteBtn" type="button" aria-label="Głośność">
                 <svg id="volumeIconSvg" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -5073,491 +5897,425 @@
   </div>
 </div>
 
+<script src="https://player.vimeo.com/api/player.js"></script>
 <script>
   (() => {
-    const logo = document.getElementById('brandLogo');
-    if (logo) {
-      const tries = ['assets/logo.png', 'assets/logo.svg', 'assets/logo.webp', 'assets/logo.jpg', 'assets/logo.jpeg'];
-      let logoTry = 0;
-      logo.addEventListener('error', () => {
-        logoTry += 1;
-        if (logoTry < tries.length) logo.src = tries[logoTry];
-      });
-      logo.src = tries[0];
-    }
-
-    document.addEventListener('pointermove', (event) => {
-      document.documentElement.style.setProperty('--mx', event.clientX + 'px');
-      document.documentElement.style.setProperty('--my', event.clientY + 'px');
-    }, { passive:true });
-
-    const nav = document.querySelector('.nav');
-    function onScrollNav(){
-      if (!nav) return;
-      if (window.scrollY > 16) nav.classList.add('nav--scrolled');
-      else nav.classList.remove('nav--scrolled');
-    }
-    window.addEventListener('scroll', onScrollNav, { passive:true });
-    onScrollNav();
-
-    function onBottomBlur(){
-      const dist = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
-      if (dist < 10) document.body.classList.add('at-bottom');
-      else document.body.classList.remove('at-bottom');
-    }
-    window.addEventListener('scroll', onBottomBlur, { passive:true });
-    window.addEventListener('resize', onBottomBlur);
-    onBottomBlur();
-
-    function setImgWithFallback(img, list){
-      if (!img || !list) return;
-      const bases = String(list).split(',').map(s => s.trim()).filter(Boolean);
-      const exts = ['.jpg', '.jpeg', '.png', '.webp'];
-      const urls = [];
-
-      bases.forEach((base) => {
-        if (/\.[a-z0-9]+$/i.test(base)) urls.push(base);
-        else exts.forEach(ext => urls.push(base + ext));
-      });
-
-      let i = 0;
-      function next(){
-        if (i >= urls.length) {
-          img.style.opacity = '0';
-          return;
-        }
-        img.style.opacity = '1';
-        img.src = urls[i++];
-      }
-      img.addEventListener('error', next);
-      next();
-    }
-
     const modal = document.getElementById('videoModal');
-    const modalCard = modal.querySelector('.modal-card');
-    const modalTitle = document.getElementById('modalTitle');
+    const modalCard = modal ? modal.querySelector('.modal-card') : null;
     const closeBtn = document.getElementById('closeModal');
-    const playerShell = document.getElementById('lcPlayerShell');
-    const video = document.getElementById('modalVideo');
+    const titleEl = document.getElementById('modalTitle');
+    const shell = document.getElementById('lcPlayerShell');
+    const iframe = document.getElementById('modalVimeo');
+    const clickLayer = document.getElementById('vimeoClickLayer');
+    const overlayIcon = shell ? shell.querySelector('.lc-overlay-play span') : null;
     const playBtn = document.getElementById('playBtn');
     const playIcon = document.getElementById('playIcon');
     const seek = document.getElementById('seek');
-    const seekWrap = document.getElementById('seekWrap');
     const seekFill = document.getElementById('seekFill');
     const timeEl = document.getElementById('time');
+    const muteBtn = document.getElementById('muteBtn');
     const volumeWrap = document.getElementById('volumeWrap');
-    const volumePop = volumeWrap ? volumeWrap.querySelector('.lc-volume-pop') : null;
-    const volumeBtn = document.getElementById('muteBtn');
+    const volumePop = document.getElementById('volumePop');
     const volume = document.getElementById('volume');
+    const qualityWrap = document.getElementById('qualityWrap');
+    const qualityBtn = document.getElementById('qualityBtn');
+    const qualityPop = document.getElementById('qualityPop');
     const fullBtn = document.getElementById('fullBtn');
+    const nav = document.querySelector('.nav');
+    const bottomBlur = document.querySelector('.bottom-blur');
 
-    const CONTROLS_HIDE_MS = 2000;
-    const VOLUME_HIDE_MS = 2000;
+    if (!modal || !modalCard || !shell || !iframe || typeof window.Vimeo === 'undefined') return;
+
+    let player = null;
+    let activeCard = null;
+    let isPlaying = false;
+    let isSeeking = false;
+    let duration = 0;
     let controlsTimer = null;
     let volumeTimer = null;
-    let isSeeking = false;
-    let openSeq = 0;
+    let progressTimer = null;
+    let progressBusy = false;
+    let isChangingQuality = false;
+    let toggleBusy = false;
 
-    let cropTimers = [];
-    const cropCanvas = document.createElement('canvas');
+    const isShellFullscreen = () => document.fullscreenElement === shell || document.webkitFullscreenElement === shell;
 
-    video.controls = false;
-    video.volume = 1;
-    video.muted = false;
-    video.setAttribute('playsinline', '');
-    video.setAttribute('webkit-playsinline', '');
-    video.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
-    video.addEventListener('contextmenu', (event) => event.preventDefault());
-    video.addEventListener('dragstart', (event) => event.preventDefault());
-
-    function fmt(seconds){
-      if (!Number.isFinite(seconds)) return '0:00';
-      const sec = Math.max(0, Math.floor(seconds));
-      const m = Math.floor(sec / 60);
-      const s = String(sec % 60).padStart(2, '0');
+    const fmt = (seconds) => {
+      seconds = Math.max(0, Math.floor(Number(seconds) || 0));
+      const m = Math.floor(seconds / 60);
+      const s = String(seconds % 60).padStart(2, '0');
       return `${m}:${s}`;
+    };
+
+    function parseRatio(aspect){
+      const parts = String(aspect || '16 / 9').split('/').map(v => Number(String(v).trim()));
+      if (parts.length === 2 && parts[0] > 0 && parts[1] > 0) return parts[0] / parts[1];
+      return 16 / 9;
     }
 
     function setSeekPercent(percent){
       const value = Math.max(0, Math.min(100, Number(percent) || 0));
-      seekWrap.style.setProperty('--seek-fill', value + '%');
-      seekFill.style.setProperty('--seek-fill', value + '%');
-    }
-
-    function setVolumeFill(){
-      const value = video.muted ? 0 : video.volume;
-      volume.value = String(value);
-      volume.style.setProperty('--vol-fill', (value * 100) + '%');
-    }
-
-    function positionVolumePop(){
-      if (!volumePop || !volumeBtn) return;
-
-      const rect = volumeBtn.getBoundingClientRect();
-      const popWidth = volumePop.offsetWidth || 138;
-      const popHeight = volumePop.offsetHeight || 44;
-      const gap = 10;
-      const edge = 8;
-
-      let left = rect.right + gap;
-      let top = rect.top + (rect.height / 2);
-
-      if (left + popWidth > window.innerWidth - edge) {
-        left = window.innerWidth - popWidth - edge;
-      }
-
-      if (top - (popHeight / 2) < edge) {
-        top = edge + (popHeight / 2);
-      }
-
-      if (top + (popHeight / 2) > window.innerHeight - edge) {
-        top = window.innerHeight - edge - (popHeight / 2);
-      }
-
-      volumePop.style.setProperty('--volume-pop-left', left + 'px');
-      volumePop.style.setProperty('--volume-pop-top', top + 'px');
-    }
-
-    function clearCropTimers(){
-      cropTimers.forEach((timer) => clearTimeout(timer));
-      cropTimers = [];
-    }
-
-    function resetVideoCrop(){
-      playerShell.style.setProperty('--lc-crop-scale', '1.001');
-      playerShell.style.setProperty('--lc-crop-x', '0%');
-      playerShell.style.setProperty('--lc-crop-y', '0%');
-    }
-
-    function applyVideoCrop(){
-      const vw = video.videoWidth || 0;
-      const vh = video.videoHeight || 0;
-      if (!vw || !vh || video.readyState < 2) return;
-
-      const sampleW = Math.min(420, vw);
-      const sampleH = Math.max(1, Math.round(sampleW * (vh / vw)));
-
-      try {
-        cropCanvas.width = sampleW;
-        cropCanvas.height = sampleH;
-
-        const ctx = cropCanvas.getContext('2d', { willReadFrequently:true });
-        ctx.drawImage(video, 0, 0, sampleW, sampleH);
-
-        const frame = ctx.getImageData(0, 0, sampleW, sampleH).data;
-
-        const isBlackPixel = (index) => {
-          const r = frame[index];
-          const g = frame[index + 1];
-          const b = frame[index + 2];
-          const max = Math.max(r, g, b);
-          const min = Math.min(r, g, b);
-          return max < 22 && (max - min) < 13;
-        };
-
-        const columnLooksBlack = (x) => {
-          let black = 0;
-          for (let y = 0; y < sampleH; y += 1) {
-            if (isBlackPixel((y * sampleW + x) * 4)) black += 1;
-          }
-          return black / sampleH > .82;
-        };
-
-        const rowLooksBlack = (y) => {
-          let black = 0;
-          for (let x = 0; x < sampleW; x += 1) {
-            if (isBlackPixel((y * sampleW + x) * 4)) black += 1;
-          }
-          return black / sampleW > .82;
-        };
-
-        let left = 0;
-        let right = sampleW - 1;
-        let top = 0;
-        let bottom = sampleH - 1;
-
-        while (left < right && columnLooksBlack(left)) left += 1;
-        while (right > left && columnLooksBlack(right)) right -= 1;
-        while (top < bottom && rowLooksBlack(top)) top += 1;
-        while (bottom > top && rowLooksBlack(bottom)) bottom -= 1;
-
-        const padX = Math.max(1, Math.round(sampleW * .006));
-        const padY = Math.max(1, Math.round(sampleH * .006));
-
-        left = Math.max(0, left - padX);
-        right = Math.min(sampleW - 1, right + padX);
-        top = Math.max(0, top - padY);
-        bottom = Math.min(sampleH - 1, bottom + padY);
-
-        const cropW = Math.max(1, right - left + 1);
-        const cropH = Math.max(1, bottom - top + 1);
-        const horizontalCut = 1 - (cropW / sampleW);
-        const verticalCut = 1 - (cropH / sampleH);
-
-        if (horizontalCut < .018 && verticalCut < .018) {
-          resetVideoCrop();
-          return;
-        }
-
-        let scale = Math.max(sampleW / cropW, sampleH / cropH);
-        scale = Math.max(1.001, Math.min(1.85, scale + .018));
-
-        const centerX = left + cropW / 2;
-        const centerY = top + cropH / 2;
-        const moveX = -scale * ((centerX - sampleW / 2) / sampleW) * 100;
-        const moveY = -scale * ((centerY - sampleH / 2) / sampleH) * 100;
-
-        playerShell.style.setProperty('--lc-crop-scale', scale.toFixed(4));
-        playerShell.style.setProperty('--lc-crop-x', moveX.toFixed(3) + '%');
-        playerShell.style.setProperty('--lc-crop-y', moveY.toFixed(3) + '%');
-      } catch(e) {
-        resetVideoCrop();
+      if (seekFill) seekFill.style.width = value + '%';
+      if (seek) {
+        seek.style.setProperty('--value', value + '%');
+        const wrap = seek.closest('.lc-seek-wrap');
+        if (wrap) wrap.style.setProperty('--seek-fill', value + '%');
       }
     }
 
-    function scheduleVideoCrop(){
-      clearCropTimers();
-      const seq = openSeq;
-      [80, 260, 620, 1200].forEach((delay) => {
-        cropTimers.push(setTimeout(() => {
-          if (seq === openSeq && modal.classList.contains('open')) applyVideoCrop();
-        }, delay));
-      });
-    }
-
-    function updatePlayerShape(){
-      const w = video.videoWidth || 0;
-      const h = video.videoHeight || 0;
-      if (!w || !h) return;
-
-      const ratio = w / h;
-      const isVertical = h > w;
-      const isMobile = window.matchMedia('(max-width:720px)').matches;
-      const body = modal.querySelector('.lc-modal-body');
-      const bodyWidth = body ? body.clientWidth : modalCard.clientWidth;
-      const modalTop = modal.querySelector('.modal-top');
-      const modalTopHeight = modalTop ? modalTop.offsetHeight : 0;
-
-      const controlsReserve = isMobile ? 76 : 82;
-      const bodyPaddingReserve = isMobile ? 28 : 34;
-      const safeReserve = modalTopHeight + controlsReserve + bodyPaddingReserve + 18;
-      const availableHeight = Math.max(isMobile ? 250 : 270, window.innerHeight - safeReserve);
-
-      let maxHeight;
-      if (isVertical) {
-        maxHeight = Math.min(window.innerHeight * (isMobile ? .70 : .74), isMobile ? 620 : 720, availableHeight);
-      } else {
-        maxHeight = Math.min(window.innerHeight * (isMobile ? .56 : .62), isMobile ? 430 : 620, availableHeight);
-      }
-
-      maxHeight = Math.max(isMobile ? 220 : 250, maxHeight);
-
-      const maxWidth = Math.max(260, bodyWidth);
-      let playerHeight = maxHeight;
-      let playerWidth = playerHeight * ratio;
-
-      if (playerWidth > maxWidth) {
-        playerWidth = maxWidth;
-        playerHeight = playerWidth / ratio;
-      }
-
-      playerShell.style.setProperty('--video-aspect', `${w} / ${h}`);
-      playerShell.style.setProperty('--video-ratio', String(ratio));
-      playerShell.style.setProperty('--lc-player-w', `${Math.round(playerWidth)}px`);
-      playerShell.style.setProperty('--lc-player-h', `${Math.round(playerHeight)}px`);
-
-      modalCard.classList.toggle('is-vertical', isVertical);
-      modalCard.classList.toggle('is-landscape', !isVertical);
-    }
-
-    function syncUI(){
-      const duration = video.duration || 0;
-      const current = video.currentTime || 0;
-      const percent = duration ? (current / duration) * 100 : 0;
-
-      if (!isSeeking) seek.value = duration ? Math.round((current / duration) * 1000) : 0;
-      setSeekPercent(percent);
-      timeEl.textContent = `${fmt(current)} / ${fmt(duration)}`;
-
-      if (video.paused || video.ended) {
-        playerShell.classList.add('is-paused');
-        playIcon.textContent = '▶';
-      } else {
-        playerShell.classList.remove('is-paused');
-        playIcon.textContent = '❚❚';
+    function setPlayerState(playing){
+      isPlaying = !!playing;
+      shell.classList.toggle('is-paused', !isPlaying);
+      shell.classList.toggle('is-playing', isPlaying);
+      if (playIcon) playIcon.textContent = isPlaying ? '❚❚' : '▶';
+      if (overlayIcon && !shell.classList.contains('is-buffering') && !shell.classList.contains('is-loading') && !shell.classList.contains('is-quality-loading')) {
+        overlayIcon.textContent = isPlaying ? '❚❚' : '▶';
       }
     }
 
-    function safePlay(){
-      const p = video.play();
-      if (p && typeof p.catch === 'function') p.catch(() => syncUI());
-    }
-
-    function togglePlay(){
-      if (video.paused || video.ended) safePlay();
-      else video.pause();
-      showControls();
+    function setVolumeVisual(){
+      const value = Math.max(0, Math.min(1, Number(volume ? volume.value : 1) || 0));
+      if (volume) volume.style.setProperty('--vol-fill', (value * 100) + '%');
+      if (volumePop) {
+        volumePop.style.setProperty('--vol-fill', (value * 100) + '%');
+        volumePop.style.setProperty('--vol-thumb-top', (18 + ((1 - value) * 118)) + 'px');
+      }
     }
 
     function showControls(){
-      playerShell.classList.remove('controls-hidden');
+      shell.classList.remove('controls-hidden');
       clearTimeout(controlsTimer);
-      if (!video.paused && !video.ended) {
+      if (isPlaying && isShellFullscreen() && !isChangingQuality) {
         controlsTimer = setTimeout(() => {
-          if (!video.paused && !video.ended && !volumeWrap.classList.contains('open')) {
-            playerShell.classList.add('controls-hidden');
-          }
-        }, CONTROLS_HIDE_MS);
+          if (isPlaying && isShellFullscreen() && !isChangingQuality) shell.classList.add('controls-hidden');
+        }, 2100);
       }
-    }
-
-    function showVolume(){
-      positionVolumePop();
-      volumeWrap.classList.add('open');
-      showControls();
-      clearTimeout(volumeTimer);
-      volumeTimer = setTimeout(() => {
-        volumeWrap.classList.remove('open');
-        showControls();
-      }, VOLUME_HIDE_MS);
     }
 
     function closeVolume(){
-      clearTimeout(volumeTimer);
+      if (!volumeWrap) return;
       volumeWrap.classList.remove('open');
-      showControls();
+      clearTimeout(volumeTimer);
     }
 
-    function getFullscreenElement(){
-      return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement || null;
+    function showVolume(){
+      if (!volumeWrap) return;
+      volumeWrap.classList.add('open');
+      setVolumeVisual();
+      clearTimeout(volumeTimer);
+      volumeTimer = setTimeout(closeVolume, 2100);
     }
 
-    function isFullscreen(){
-      return getFullscreenElement() === playerShell;
-    }
-
-    function requestFullscreen(){
-      if (playerShell.requestFullscreen) return playerShell.requestFullscreen();
-      if (playerShell.webkitRequestFullscreen) return playerShell.webkitRequestFullscreen();
-      if (playerShell.msRequestFullscreen) return playerShell.msRequestFullscreen();
-      return null;
-    }
-
-    function exitFullscreen(){
-      if (document.exitFullscreen) return document.exitFullscreen();
-      if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
-      if (document.msExitFullscreen) return document.msExitFullscreen();
-      return null;
-    }
-
-    function toggleFullscreen(){
-      if (isFullscreen()) {
-        const p = exitFullscreen();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
-      } else if (video.webkitEnterFullscreen && /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        video.webkitEnterFullscreen();
-      } else {
-        const p = requestFullscreen();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
+    async function safePlayerCall(method, ...args){
+      if (!player || typeof player[method] !== 'function') return null;
+      try {
+        return await Promise.race([
+          player[method](...args),
+          new Promise(resolve => setTimeout(() => resolve(null), 1200))
+        ]);
+      } catch (_) {
+        return null;
       }
-      showControls();
     }
 
-    function openModal(card){
-      const src = (card.dataset.video || '').trim();
-      if (!src) return;
 
-      const title = card.dataset.title || 'Podgląd';
-      const seq = ++openSeq;
-      const img = card.querySelector('.thumb-img');
+    async function updateProgressNow(){
+      if (!player || isSeeking || progressBusy) return;
+      progressBusy = true;
+      try {
+        const currentRaw = await safePlayerCall('getCurrentTime');
+        const durationRaw = await safePlayerCall('getDuration');
+        const current = Math.max(0, Number(currentRaw) || 0);
+        const dur = Math.max(0, Number(durationRaw) || duration || 0);
+        duration = dur;
+        if (duration > 0) {
+          const ratio = Math.max(0, Math.min(1, current / duration));
+          if (seek) seek.value = String(Math.round(ratio * 1000));
+          setSeekPercent(ratio * 100);
+          if (timeEl) timeEl.textContent = `${fmt(current)} / ${fmt(duration)}`;
+        } else if (timeEl) {
+          timeEl.textContent = `${fmt(current)} / 0:00`;
+        }
+      } finally {
+        progressBusy = false;
+      }
+    }
 
-      modalTitle.textContent = title;
-      if (img && img.src) video.poster = img.src;
-      else video.removeAttribute('poster');
+    function startProgressTimer(){
+      clearInterval(progressTimer);
+      progressTimer = setInterval(updateProgressNow, 250);
+    }
 
-      closeVolume();
-      clearCropTimers();
-      resetVideoCrop();
-      playerShell.classList.remove('controls-hidden');
-      modalCard.classList.remove('is-vertical', 'is-landscape');
+    function stopProgressTimer(){
+      clearInterval(progressTimer);
+      progressTimer = null;
+      progressBusy = false;
+    }
+
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    async function waitUntilPaused(timeout = 850){
+      const start = performance.now();
+      while (performance.now() - start < timeout) {
+        const paused = await safePlayerCall('getPaused');
+        if (paused === true) return true;
+        await sleep(60);
+      }
+      return false;
+    }
+
+    function setBuffering(active, qualityMode = false){
+      const on = !!active;
+      shell.classList.toggle('is-buffering', on);
+      shell.classList.toggle('is-quality-loading', on && !!qualityMode);
+      if (overlayIcon) overlayIcon.textContent = on ? '' : (isPlaying ? '❚❚' : '▶');
+      clearTimeout(controlsTimer);
+      if (on) shell.classList.remove('controls-hidden');
+    }
+
+    function updateFullscreenClass(){
+      shell.classList.toggle('is-native-fullscreen', isShellFullscreen());
+    }
+
+    function closeQuality(){
+      if (!qualityWrap) return;
+      qualityWrap.classList.remove('open');
+    }
+
+    function renderQualityOptions(items){
+      if (!qualityWrap || !qualityBtn || !qualityPop) return;
+      qualityPop.innerHTML = '';
+      const qualities = Array.isArray(items) ? items : [];
+      const usable = qualities.filter(q => q && (q.id || q.label));
+      if (!usable.length) {
+        qualityBtn.textContent = 'Auto';
+        qualityWrap.classList.add('is-disabled');
+        return;
+      }
+      qualityWrap.classList.remove('is-disabled');
+      const auto = document.createElement('button');
+      auto.type = 'button';
+      auto.textContent = 'Auto';
+      auto.dataset.quality = 'auto';
+      qualityPop.appendChild(auto);
+      usable.forEach((q) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = q.label || q.id;
+        btn.dataset.quality = q.id || q.label;
+        if (q.active) {
+          btn.classList.add('active');
+          qualityBtn.textContent = q.label || q.id;
+        }
+        qualityPop.appendChild(btn);
+      });
+      if (!qualityPop.querySelector('.active')) qualityBtn.textContent = 'HD';
+    }
+
+    async function refreshQualities(){
+      const qualities = await safePlayerCall('getQualities');
+      renderQualityOptions(qualities);
+    }
+
+    function buildVimeoSrc(id){
+      const params = new URLSearchParams({
+        autopause:'0',
+        autoplay:'0',
+        loop:'1',
+        controls:'0',
+        title:'0',
+        byline:'0',
+        portrait:'0',
+        badge:'0',
+        pip:'0',
+        dnt:'1',
+        playsinline:'1',
+        responsive:'1',
+        transparent:'0'
+      });
+      return `https://player.vimeo.com/video/${encodeURIComponent(id)}?${params.toString()}`;
+    }
+
+    async function createPlayer(id){
+      if (player) {
+        try { await player.unload(); } catch (_) {}
+        player = null;
+      }
+      iframe.src = buildVimeoSrc(id);
+      player = new Vimeo.Player(iframe);
+
+      player.on('loaded', async () => {
+        duration = Number(await safePlayerCall('getDuration')) || 0;
+        timeEl.textContent = `0:00 / ${fmt(duration)}`;
+        setSeekPercent(0);
+        shell.classList.remove('is-loading');
+        setBuffering(false);
+      });
+      player.on('durationchange', async (data) => {
+        duration = Number(data && data.duration) || Number(await safePlayerCall('getDuration')) || duration || 0;
+        updateProgressNow();
+      });
+      player.on('play', () => { setBuffering(false); setPlayerState(true); startProgressTimer(); updateProgressNow(); showControls(); });
+      player.on('playing', () => { setBuffering(false); setPlayerState(true); startProgressTimer(); updateProgressNow(); showControls(); });
+      player.on('pause', () => { setPlayerState(false); updateProgressNow(); if (!isChangingQuality) shell.classList.remove('controls-hidden'); });
+      player.on('bufferstart', () => { if (isChangingQuality || shell.classList.contains('is-loading')) setBuffering(true, isChangingQuality); });
+      player.on('bufferend', () => { if (!isChangingQuality) setBuffering(false); updateProgressNow(); });
+      player.on('ended', async () => {
+        await safePlayerCall('setCurrentTime', 0);
+        await safePlayerCall('play');
+      });
+      player.on('timeupdate', (data) => {
+        duration = Number(data.duration || duration || 0);
+        if (!isSeeking && duration > 0) {
+          const seconds = Number(data.seconds || 0);
+          const percent = (seconds / duration) * 100;
+          seek.value = String(Math.round((seconds / duration) * 1000));
+          setSeekPercent(percent);
+          timeEl.textContent = `${fmt(seconds)} / ${fmt(duration)}`;
+        }
+      });
+      player.on('volumechange', async () => {
+        const v = await safePlayerCall('getVolume');
+        if (v !== null && volume) {
+          volume.value = String(v);
+          setVolumeVisual();
+        }
+      });
+
+      await player.ready();
+      await safePlayerCall('setVolume', Number(volume ? volume.value : 1) || 1);
+      await safePlayerCall('setLoop', true);
+      await refreshQualities();
+      startProgressTimer();
+      updateProgressNow();
+    }
+
+    async function openModal(card){
+      const id = card.dataset.vimeoId;
+      if (!id) return;
+      activeCard = card;
+      const aspect = card.dataset.vimeoAspect || '16 / 9';
+      const orientation = card.dataset.vimeoOrientation || (parseRatio(aspect) < 1 ? 'vertical' : 'landscape');
+
+      titleEl.textContent = card.dataset.title || 'Podgląd';
+      modalCard.classList.toggle('is-vertical', orientation === 'vertical');
+      modalCard.classList.toggle('is-landscape', orientation !== 'vertical');
+      modalCard.dataset.activeKey = card.dataset.key || '';
+      shell.style.setProperty('--video-aspect', aspect);
+      shell.style.setProperty('--video-ratio', String(parseRatio(aspect)));
+      shell.classList.add('is-loading');
+      setBuffering(true);
+      setPlayerState(false);
+      setSeekPercent(0);
+      seek.value = '0';
+      timeEl.textContent = '0:00 / 0:00';
 
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       document.body.classList.add('modal-open');
 
-      try { video.pause(); } catch(e) {}
-      video.removeAttribute('src');
-      video.load();
-      video.src = src;
-      video.preload = 'auto';
-      video.load();
-
-      seek.value = '0';
-      setSeekPercent(0);
-      timeEl.textContent = '0:00 / 0:00';
-      syncUI();
-
-      let started = false;
-      function start(){
-        if (started || seq !== openSeq) return;
-        started = true;
-        updatePlayerShape();
-        scheduleVideoCrop();
-        safePlay();
-        syncUI();
-        showControls();
-      }
-
-      video.addEventListener('loadedmetadata', start, { once:true });
-      video.addEventListener('canplay', start, { once:true });
-      setTimeout(start, 650);
+      await createPlayer(id);
+      showControls();
+      try { await player.play(); } catch (_) { setPlayerState(false); }
     }
 
-    function closeModal(){
-      closeVolume();
-      clearTimeout(controlsTimer);
-      if (isFullscreen()) {
-        const p = exitFullscreen();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
-      }
-
+    async function closeModal(){
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('modal-open');
-      openSeq += 1;
-
-      try { video.pause(); } catch(e) {}
-      video.removeAttribute('src');
-      video.removeAttribute('poster');
-      video.preload = 'metadata';
-      video.load();
-
-      seek.value = '0';
-      setSeekPercent(0);
-      timeEl.textContent = '0:00 / 0:00';
-      playerShell.classList.add('is-paused');
-      playerShell.classList.remove('controls-hidden');
-      clearCropTimers();
-      resetVideoCrop();
-      playerShell.style.removeProperty('--video-aspect');
-      playerShell.style.removeProperty('--video-ratio');
-      playerShell.style.removeProperty('--lc-player-w');
-      playerShell.style.removeProperty('--lc-player-h');
-      modalCard.classList.remove('is-vertical', 'is-landscape');
+      closeVolume();
+      closeQuality();
+      clearTimeout(controlsTimer);
+      stopProgressTimer();
+      if (document.fullscreenElement === shell && document.exitFullscreen) {
+        try { await document.exitFullscreen(); } catch (_) {}
+      }
+      if (player) {
+        try { await player.pause(); } catch (_) {}
+        try { await player.unload(); } catch (_) {}
+        player = null;
+      }
+      iframe.src = 'about:blank';
+      delete modalCard.dataset.activeKey;
+      activeCard = null;
+      setPlayerState(false);
     }
 
-    document.querySelectorAll('.work').forEach((card) => {
+    async function togglePlay(){
+      if (!player || isChangingQuality || toggleBusy) return;
+      toggleBusy = true;
+      closeVolume();
+      closeQuality();
+      shell.classList.remove('is-loading', 'is-buffering', 'is-quality-loading');
+      try {
+        const paused = await safePlayerCall('getPaused');
+        const shouldPlay = paused !== false;
+        if (shouldPlay) {
+          if (overlayIcon) overlayIcon.textContent = '❚❚';
+          setPlayerState(true);
+          await safePlayerCall('play');
+          startProgressTimer();
+        } else {
+          if (overlayIcon) overlayIcon.textContent = '▶';
+          setPlayerState(false);
+          await safePlayerCall('pause');
+          await updateProgressNow();
+        }
+      } finally {
+        showControls();
+        setTimeout(() => { toggleBusy = false; }, 140);
+      }
+    }
+
+    function setThumb(card){
+      const id = card.dataset.vimeoId;
       const img = card.querySelector('.thumb-img');
-      setImgWithFallback(img, card.dataset.thumbs || card.dataset.thumb || '');
+      const inner = card.querySelector('.thumb-inner');
+      if (!id || !img || !inner || card.dataset.thumbLoaded === '1') return;
 
-      card.addEventListener('pointermove', (event) => {
-        const rect = card.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width) * 100;
-        card.style.setProperty('--card-x', x + '%');
-      });
+      card.dataset.thumbLoaded = '1';
+      img.referrerPolicy = 'strict-origin-when-cross-origin';
+      img.alt = card.dataset.title || '';
+      img.onload = () => inner.classList.add('has-thumb');
+      img.onerror = () => inner.classList.remove('has-thumb');
 
+      fetch(`https://vimeo.com/api/oembed.json?url=${encodeURIComponent('https://vimeo.com/' + id)}&width=960`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (data && data.thumbnail_url) {
+            inner.style.setProperty('--thumb-bg', `url("${data.thumbnail_url}")`);
+            img.src = data.thumbnail_url;
+          }
+        })
+        .catch(() => {});
+    }
+
+    const vimeoCards = Array.from(document.querySelectorAll('.work[data-vimeo-id]'));
+
+    function observeThumbs(){
+      if (!('IntersectionObserver' in window)) {
+        vimeoCards.forEach(setThumb);
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          setThumb(entry.target);
+          observer.unobserve(entry.target);
+        });
+      }, { rootMargin:'420px 0px' });
+
+      vimeoCards.forEach(card => observer.observe(card));
+    }
+
+    vimeoCards.forEach((card) => {
       card.setAttribute('tabindex', '0');
-      card.addEventListener('click', () => openModal(card));
+      card.setAttribute('role', 'button');
+      card.addEventListener('click', (event) => {
+        event.preventDefault();
+        openModal(card);
+      });
       card.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
@@ -5566,119 +6324,185 @@
       });
     });
 
-    playBtn.addEventListener('click', (event) => {
-      event.stopPropagation();
-      togglePlay();
-    });
+    observeThumbs();
 
-    video.addEventListener('click', (event) => {
-      event.stopPropagation();
-      togglePlay();
-    });
-
-    playerShell.addEventListener('click', (event) => {
-      if (event.target === playerShell) togglePlay();
-    });
-
-    seek.addEventListener('input', () => {
-      isSeeking = true;
-      const duration = video.duration || 0;
-      const percent = Number(seek.value) / 10;
-      const next = duration * (Number(seek.value) / 1000);
-      setSeekPercent(percent);
-      timeEl.textContent = `${fmt(next)} / ${fmt(duration)}`;
-      showControls();
-    });
-
-    seek.addEventListener('change', () => {
-      const duration = video.duration || 0;
-      video.currentTime = duration * (Number(seek.value) / 1000);
-      isSeeking = false;
-      syncUI();
-      showControls();
-    });
-
-    volumeBtn.addEventListener('click', (event) => {
-      event.stopPropagation();
-      if (volumeWrap.classList.contains('open')) {
+    [playBtn, clickLayer].forEach((el) => {
+      if (!el) return;
+      el.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
         closeVolume();
-      } else {
-        showVolume();
-      }
+        closeQuality();
+        togglePlay();
+      });
     });
 
-    volume.addEventListener('input', () => {
-      const value = Math.max(0, Math.min(1, Number(volume.value) || 0));
-      video.volume = value;
-      video.muted = value === 0;
-      setVolumeFill();
-      showVolume();
-    });
-
-    ['pointerdown', 'pointermove', 'touchstart', 'focusin'].forEach((eventName) => {
-      volume.addEventListener(eventName, () => {
-        if (volumeWrap.classList.contains('open')) showVolume();
-      }, { passive:true });
-    });
-
-    fullBtn.addEventListener('click', (event) => {
+    shell.addEventListener('click', (event) => {
+      if (event.target.closest('.lc-controls') || event.target.closest('.lc-volume-pop') || event.target.closest('.lc-quality-pop')) return;
+      event.preventDefault();
       event.stopPropagation();
-      toggleFullscreen();
+      togglePlay();
     });
 
-    ['mousemove', 'pointermove', 'touchstart', 'touchmove', 'click'].forEach((eventName) => {
-      playerShell.addEventListener(eventName, showControls, { passive:true });
-    });
+    if (seek) {
+      seek.addEventListener('input', () => {
+        isSeeking = true;
+        const percent = Number(seek.value) / 10;
+        setSeekPercent(percent);
+        const seconds = duration * (Number(seek.value) / 1000);
+        timeEl.textContent = `${fmt(seconds)} / ${fmt(duration)}`;
+        showControls();
+      });
+      seek.addEventListener('change', async () => {
+        const seconds = duration * (Number(seek.value) / 1000);
+        await safePlayerCall('setCurrentTime', seconds);
+        isSeeking = false;
+        showControls();
+      });
+    }
 
-    video.addEventListener('loadedmetadata', () => {
-      updatePlayerShape();
-      scheduleVideoCrop();
-      syncUI();
-    });
-    video.addEventListener('loadeddata', scheduleVideoCrop);
-    video.addEventListener('canplay', scheduleVideoCrop);
-    video.addEventListener('playing', scheduleVideoCrop);
-    video.addEventListener('timeupdate', () => {
-      if (!isSeeking) syncUI();
-    });
-    video.addEventListener('play', () => {
-      syncUI();
-      showControls();
-    });
-    video.addEventListener('pause', () => {
-      syncUI();
-      playerShell.classList.remove('controls-hidden');
-      clearTimeout(controlsTimer);
-    });
-    video.addEventListener('ended', () => {
-      syncUI();
-      playerShell.classList.remove('controls-hidden');
-      if (isFullscreen()) {
-        const p = exitFullscreen();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
-      }
-    });
-    video.addEventListener('volumechange', setVolumeFill);
-    setVolumeFill();
+    if (muteBtn) {
+      muteBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        showVolume();
+        showControls();
+      });
+      muteBtn.addEventListener('dblclick', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const current = Number(volume.value || 1);
+        if (current > 0) {
+          volume.dataset.beforeMute = String(current);
+          volume.value = '0';
+          await safePlayerCall('setVolume', 0);
+        } else {
+          const previous = Number(volume.dataset.beforeMute || 1) || 1;
+          volume.value = String(previous);
+          await safePlayerCall('setVolume', previous);
+        }
+        setVolumeVisual();
+        showVolume();
+      });
+    }
 
-    document.addEventListener('fullscreenchange', () => {
-      showControls();
-      if (volumeWrap.classList.contains('open')) positionVolumePop();
-    });
-    document.addEventListener('webkitfullscreenchange', () => {
-      showControls();
-      if (volumeWrap.classList.contains('open')) positionVolumePop();
-    });
-    window.addEventListener('resize', () => {
-      if (modal.classList.contains('open') && video.videoWidth && video.videoHeight) updatePlayerShape();
-      if (volumeWrap.classList.contains('open')) positionVolumePop();
+    if (qualityBtn && qualityWrap && qualityPop) {
+      qualityBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        await refreshQualities();
+        qualityWrap.classList.toggle('open');
+        closeVolume();
+        showControls();
+      });
+      qualityPop.addEventListener('click', async (event) => {
+        const btn = event.target.closest('button[data-quality]');
+        if (!btn || isChangingQuality) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const q = btn.dataset.quality;
+        const pausedBefore = await safePlayerCall('getPaused');
+        const wasPlaying = pausedBefore === false || isPlaying;
+        const current = Number(await safePlayerCall('getCurrentTime')) || 0;
+        isChangingQuality = true;
+        closeQuality();
+        closeVolume();
+        setBuffering(true, true);
+        setPlayerState(false);
+        startProgressTimer();
+        try {
+          await safePlayerCall('pause');
+          await waitUntilPaused();
+          if (q) await safePlayerCall('setQuality', q);
+          await sleep(220);
+          if (current > 0) await safePlayerCall('setCurrentTime', current);
+          qualityBtn.textContent = btn.textContent || 'Auto';
+          Array.from(qualityPop.querySelectorAll('button')).forEach(el => el.classList.toggle('active', el === btn));
+          if (wasPlaying) {
+            await sleep(220);
+            await safePlayerCall('play');
+            setPlayerState(true);
+          } else {
+            setPlayerState(false);
+          }
+          await updateProgressNow();
+        } finally {
+          isChangingQuality = false;
+          setBuffering(false, false);
+          shell.classList.remove('is-quality-loading');
+          showControls();
+        }
+      });
+    }
+
+    if (volume) {
+      volume.addEventListener('input', async () => {
+        const value = Math.max(0, Math.min(1, Number(volume.value) || 0));
+        await safePlayerCall('setVolume', value);
+        setVolumeVisual();
+        showVolume();
+      });
+      // Głośność pokazuje się po kliknięciu ikony, nie po samym najechaniu myszką.
+      ['pointerdown','touchstart'].forEach((name) => {
+        volume.addEventListener(name, showVolume, { passive:true });
+      });
+    }
+
+    if (volumePop && volume) {
+      let volumeDragging = false;
+      const setVolumeFromPointer = async (event) => {
+        const rect = volumePop.getBoundingClientRect();
+        const topPad = 18;
+        const bottomPad = 18;
+        const usable = Math.max(1, rect.height - topPad - bottomPad);
+        const y = Math.max(topPad, Math.min(rect.height - bottomPad, event.clientY - rect.top));
+        const value = Math.max(0, Math.min(1, 1 - ((y - topPad) / usable)));
+        volume.value = String(value);
+        await safePlayerCall('setVolume', value);
+        setVolumeVisual();
+        showVolume();
+      };
+      volumePop.addEventListener('pointerdown', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        volumeDragging = true;
+        try { volumePop.setPointerCapture(event.pointerId); } catch (_) {}
+        await setVolumeFromPointer(event);
+      });
+      volumePop.addEventListener('pointermove', async (event) => {
+        if (!volumeDragging) return;
+        event.preventDefault();
+        await setVolumeFromPointer(event);
+      });
+      ['pointerup','pointercancel','pointerleave'].forEach((name) => {
+        volumePop.addEventListener(name, () => { volumeDragging = false; });
+      });
+    }
+
+    if (fullBtn) {
+      fullBtn.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        if (document.fullscreenElement === shell) {
+          if (document.exitFullscreen) await document.exitFullscreen();
+        } else if (shell.requestFullscreen) {
+          await shell.requestFullscreen();
+        } else if (shell.webkitRequestFullscreen) {
+          shell.webkitRequestFullscreen();
+        }
+        showControls();
+      });
+    }
+
+    ['mousemove','pointermove','touchstart','touchmove','click'].forEach((name) => {
+      shell.addEventListener(name, showControls, { passive:true });
     });
 
     document.addEventListener('click', (event) => {
-      if (!volumeWrap.contains(event.target)) closeVolume();
+      if (volumeWrap && !volumeWrap.contains(event.target)) closeVolume();
+      if (qualityWrap && !qualityWrap.contains(event.target)) closeQuality();
     });
 
-    closeBtn.addEventListener('click', closeModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (event) => {
       if (event.target === modal) closeModal();
     });
@@ -5691,112 +6515,34 @@
         togglePlay();
       }
     });
-  })();
-</script>
 
-<script>
-  (() => {
-    const wrap = document.getElementById('volumeWrap');
-    const pop = document.getElementById('volumePop');
-    const range = document.getElementById('volume');
-    const video = document.getElementById('modalVideo');
-    if (!wrap || !pop || !range || !video) return;
 
-    function setFromPoint(clientY){
-      const rect = pop.getBoundingClientRect();
-      const pad = 18;
-      const usableTop = rect.top + pad;
-      const usableBottom = rect.bottom - pad;
-      const usable = Math.max(1, usableBottom - usableTop);
-      const raw = 1 - ((clientY - usableTop) / usable);
-      const value = Math.max(0, Math.min(1, raw));
-      range.value = String(value);
-      video.volume = value;
-      video.muted = value === 0;
-      range.style.setProperty('--vol-fill', (value * 100) + '%');
-      range.dispatchEvent(new Event('input', { bubbles:true }));
-    }
+    ['fullscreenchange','webkitfullscreenchange'].forEach((name) => {
+      document.addEventListener(name, () => {
+        updateFullscreenClass();
+        showControls();
+        closeVolume();
+        closeQuality();
+        clearTimeout(controlsTimer);
+        if (isPlaying && isShellFullscreen() && !isChangingQuality) {
+          controlsTimer = setTimeout(() => {
+            if (isPlaying && isShellFullscreen() && !isChangingQuality) shell.classList.add('controls-hidden');
+          }, 2100);
+        }
 
-    let dragging = false;
-    pop.addEventListener('pointerdown', (event) => {
-      if (!wrap.classList.contains('open')) return;
-      dragging = true;
-      pop.setPointerCapture(event.pointerId);
-      setFromPoint(event.clientY);
-      event.preventDefault();
-      event.stopPropagation();
+      });
     });
 
-    pop.addEventListener('pointermove', (event) => {
-      if (!dragging) return;
-      setFromPoint(event.clientY);
-      event.preventDefault();
-      event.stopPropagation();
-    });
+    window.addEventListener('scroll', () => {
+      if (nav) nav.classList.toggle('nav--scrolled', window.scrollY > 10);
+      if (bottomBlur) {
+        const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 12;
+        document.body.classList.toggle('at-bottom', atBottom);
+      }
+    }, { passive:true });
 
-    ['pointerup','pointercancel','lostpointercapture'].forEach((name) => {
-      pop.addEventListener(name, () => { dragging = false; });
-    });
+    setVolumeVisual();
   })();
 </script>
-
-
-
-<script>
-  (() => {
-    const wrap = document.getElementById('volumeWrap');
-    const pop = document.getElementById('volumePop');
-    const range = document.getElementById('volume');
-    const video = document.getElementById('modalVideo');
-    if (!wrap || !pop || !range || !video) return;
-
-    function paintVolumeShape(){
-      const value = Math.max(0, Math.min(1, video.muted ? 0 : Number(range.value || video.volume || 0)));
-      const fill = (value * 100) + '%';
-      const height = pop.offsetHeight || 160;
-      const pad = 18;
-      const usable = Math.max(1, height - (pad * 2));
-      const top = pad + ((1 - value) * usable);
-
-      pop.style.setProperty('--vol-fill', fill);
-      pop.style.setProperty('--vol-thumb-top', top + 'px');
-      range.style.setProperty('--vol-fill', fill);
-    }
-
-    ['input','change'].forEach((name) => range.addEventListener(name, paintVolumeShape));
-    video.addEventListener('volumechange', paintVolumeShape);
-    wrap.addEventListener('click', () => requestAnimationFrame(paintVolumeShape));
-    window.addEventListener('resize', paintVolumeShape);
-    paintVolumeShape();
-  })();
-</script>
-
-
-
-<script>
-  (() => {
-    const shell = document.getElementById('lcPlayerShell');
-    const video = document.getElementById('modalVideo');
-    if (!shell || !video) return;
-
-    function lockFullscreenScale(){
-      const fs = document.fullscreenElement === shell || document.webkitFullscreenElement === shell;
-      if (!fs) return;
-      shell.style.setProperty('--lc-crop-scale', '1');
-      shell.style.setProperty('--lc-crop-x', '0%');
-      shell.style.setProperty('--lc-crop-y', '0%');
-      video.style.objectFit = 'contain';
-      video.style.objectPosition = 'center center';
-      video.style.transform = 'none';
-    }
-
-    document.addEventListener('fullscreenchange', () => requestAnimationFrame(lockFullscreenScale));
-    document.addEventListener('webkitfullscreenchange', () => requestAnimationFrame(lockFullscreenScale));
-    video.addEventListener('loadedmetadata', lockFullscreenScale);
-    video.addEventListener('play', lockFullscreenScale);
-    window.addEventListener('resize', lockFullscreenScale);
-  })();
-</script>
-
 </body>
 </html>
