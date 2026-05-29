@@ -9,12 +9,9 @@
 
   <script>document.documentElement.classList.add('js');</script>
 
-  <link rel="icon" href="assets/flaticon" type="image/png">
-  <link rel="shortcut icon" href="assets/flaticon" type="image/png">
-  <link rel="apple-touch-icon" href="assets/flaticon">
-  <link rel="icon" href="assets/flaticon.png" type="image/png">
-  <link rel="shortcut icon" href="assets/flaticon.png" type="image/png">
-  <link rel="apple-touch-icon" href="assets/flaticon.png">
+  <link rel="icon" href="flaticon.png" type="image/png">
+  <link rel="shortcut icon" href="flaticon.png" type="image/png">
+  <link rel="apple-touch-icon" href="flaticon.png">
 
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://www.youtube-nocookie.com">
@@ -1431,6 +1428,7 @@
         min-height:80px !important;
         display:flex !important;
         align-items:flex-end !important;
+
         gap:5px !important;
         margin:0 0 13px !important;
         padding:17px 15px 14px !important;
@@ -5116,6 +5114,7 @@
               </div>
 
               <p class="about-lead"><strong>Mam 16 lat</strong> i montuję krótkie filmy pod tempo, uwagę i jasny przekaz.</p>
+
               <p>Montuję short-formy tak, żeby widz nie miał powodu przewinąć dalej. Liczy się pierwsza sekunda, tempo, napisy, rytm i to, czy całość ma konkretny flow.</p>
               <div class="about-sep" aria-hidden="true"></div>
               <p>Nie składam klipów losowo. Każde cięcie, zoom, napis i dźwięk ma pomagać w utrzymaniu uwagi, a nie tylko ładnie wyglądać.</p>
@@ -5339,6 +5338,7 @@
       'assets/cta-1.mp4': { id:'1196112974', aspect:'9 / 16', orientation:'vertical' },
       'assets/cta-2.mp4': { id:'1196112979', aspect:'944 / 2048', orientation:'vertical' },
       'assets/me-1.mp4': { id:'1196112985', aspect:'16 / 9', orientation:'landscape' }
+
     };
 
     let player = null;
@@ -14051,6 +14051,7 @@
       e.preventDefault();
       e.stopPropagation();
       if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+
       press(btn.closest('.clean-card'));
       const style = styleFromButton(btn);
       window.setTimeout(function(){
@@ -14603,6 +14604,7 @@
     overscroll-behavior-y:auto !important;
     scroll-behavior:smooth;
   }
+
 
   body{
     height:auto !important;
