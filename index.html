@@ -3406,6 +3406,13 @@
         height:38px !important;
       }
     }
+
+    @media (max-width:720px){
+      .nav-cta{
+        transform:translateX(-8px) !important;
+      }
+    }
+
 </style>
 
   <style>
@@ -5562,6 +5569,7 @@
         setSeekPercent(0);
         shell.classList.remove('is-loading');
         setBuffering(false);
+
       });
       player.on('durationchange', async (data) => {
         duration = Number(data && data.duration) || Number(await safePlayerCall('getDuration')) || duration || 0;
@@ -6917,6 +6925,7 @@
             }
           }, 120);
         }
+
 
         function watchScroll(){
           const rect = card.getBoundingClientRect();
@@ -9087,6 +9096,7 @@
     animation:sectionLineBreathV15 5.5s ease-in-out infinite !important;
   }
   @keyframes sectionLineBreathV15{
+
     0%,100%{ opacity:.55; transform:translateX(-50%) scaleX(.90); filter:hue-rotate(0deg); }
     50%{ opacity:.96; transform:translateX(-50%) scaleX(1); filter:hue-rotate(20deg); }
   }
@@ -12003,6 +12013,7 @@
     content:"" !important;
     position:absolute !important;
     left:50% !important;
+
     top:0 !important;
     width:72% !important;
     height:1px !important;
