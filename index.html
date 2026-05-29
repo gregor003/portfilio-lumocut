@@ -3406,13 +3406,6 @@
         height:38px !important;
       }
     }
-
-    @media (max-width:720px){
-      .nav-cta{
-        transform:translateX(-8px) !important;
-      }
-    }
-
 </style>
 
   <style>
@@ -4816,6 +4809,15 @@
   }
 </style>
 
+
+<style id="lumocut-mobile-menu-shift-fix">
+  @media (max-width:720px){
+    .nav-cta{
+      transform:translateX(-8px) !important;
+    }
+  }
+</style>
+
 </head>
 
 <body id="start">
@@ -4824,7 +4826,7 @@
   <nav class="nav" id="top" aria-label="Główna nawigacja">
     <div class="nav-inner">
       <a class="brand" id="brandHome" href="#start" aria-label="Lumocut, wróć na początek strony">
-        <div class="avatar" title="Lumocut"><img id="brandLogo" src="assets/logo.png" alt="Lumocut"></div>
+        <div class="avatar" title="Lumocut"><img id="brandLogo" src="logo.png" alt="Lumocut"></div>
         <div class="name"><span class="brand-main">Lumocut <em>· montaż</em></span><span class="brand-sub">Reels · TikTok · Shorts</span></div>
       </a>
 
@@ -5569,7 +5571,6 @@
         setSeekPercent(0);
         shell.classList.remove('is-loading');
         setBuffering(false);
-
       });
       player.on('durationchange', async (data) => {
         duration = Number(data && data.duration) || Number(await safePlayerCall('getDuration')) || duration || 0;
@@ -5930,7 +5931,7 @@
     (function(){
       const img = document.getElementById('brandLogo');
       if(!img) return;
-      const tries = ['assets/logo.png', 'assets/logo.svg', 'assets/logo.webp', 'assets/logo.jpg', 'assets/logo.jpeg'];
+      const tries = ['logo.png', 'logo.svg', 'logo.webp', 'logo.jpg', 'logo.jpeg', 'assets/logo.png', 'assets/logo.svg', 'assets/logo.webp', 'assets/logo.jpg', 'assets/logo.jpeg'];
       let i = 0;
       img.addEventListener('error', function(){ i += 1; if(i < tries.length) img.src = tries[i]; });
       img.src = tries[0];
@@ -5988,6 +5989,7 @@
       function update(){
         if(nav){
           if(window.scrollY > 16) nav.classList.add('nav--scrolled');
+
           else nav.classList.remove('nav--scrolled');
         }
         ticking = false;
@@ -6403,6 +6405,7 @@
         try{ video.pause(); }catch(e){}
         video.removeAttribute('src');
         video.load();
+
         video.src = src;
         video.preload = 'auto';
         video.load();
@@ -6925,7 +6928,6 @@
             }
           }, 120);
         }
-
 
         function watchScroll(){
           const rect = card.getBoundingClientRect();
@@ -9096,7 +9098,6 @@
     animation:sectionLineBreathV15 5.5s ease-in-out infinite !important;
   }
   @keyframes sectionLineBreathV15{
-
     0%,100%{ opacity:.55; transform:translateX(-50%) scaleX(.90); filter:hue-rotate(0deg); }
     50%{ opacity:.96; transform:translateX(-50%) scaleX(1); filter:hue-rotate(20deg); }
   }
@@ -9864,6 +9865,7 @@
       0 0 0 5px rgba(168,85,247,.055),
       0 13px 31px rgba(0,0,0,.28),
       inset 0 1px 0 rgba(255,255,255,.17) !important;
+
   }
   .brand .avatar img{ transform:scale(1.23) !important; }
   .brand .name::before{ display:none !important; content:none !important; }
@@ -10050,6 +10052,7 @@
   .style-choice-recommended b{
     background:linear-gradient(90deg, #fff, #ffe4e6 26%, #f472b6 62%, #fb7185) !important;
     -webkit-background-clip:text !important;
+
     background-clip:text !important;
     color:transparent !important;
   }
@@ -12013,7 +12016,6 @@
     content:"" !important;
     position:absolute !important;
     left:50% !important;
-
     top:0 !important;
     width:72% !important;
     height:1px !important;
