@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Polityka prywatności • Lumocut</title>
   <meta name="description" content="Polityka prywatności — Lumocut." />
+  <link rel="icon" href="flaticon.png" type="image/png">
+  <link rel="shortcut icon" href="flaticon.png" type="image/png">
+  <link rel="apple-touch-icon" href="flaticon.png">
 	
   <style>
     :root{
@@ -117,17 +120,20 @@
     }
 
     .nav-inner{
-      display:flex;
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr);
       align-items:center;
-      justify-content:space-between;
-      gap: 14px;
+      gap: 12px;
+      position:relative;
+      z-index:1;
     }
 
     .brand{
       display:flex;
       align-items:center;
       gap: 10px;
-      min-width: 200px;
+      min-width: 0;
+      justify-self:start;
     }
 
     .brand .avatar{
@@ -156,6 +162,39 @@
       letter-spacing: .2px;
       opacity: .95;
       font-size: 15px;
+    }
+
+    .nav-center{
+      justify-self:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-width:0;
+    }
+
+    .nav-center .back-btn{
+      min-width:126px;
+      min-height:44px;
+      padding-inline:24px;
+      border-color:rgba(216,180,254,.25);
+      background:
+        radial-gradient(110px 48px at 50% 0%, rgba(216,180,254,.12), transparent 72%),
+        linear-gradient(180deg, rgba(255,255,255,.070), rgba(255,255,255,.024));
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.13), 0 12px 30px rgba(0,0,0,.22);
+    }
+
+    .nav-center .back-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 15px 36px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.15);
+    }
+
+    .nav-cta{
+      justify-self:end;
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:9px;
+      min-width:0;
     }
 
     .nav-links{
@@ -333,8 +372,28 @@
     /* ===== RESPONSIVE ===== */
     @media (max-width: 720px){
       .nav-links{ display:none; }
+      .nav{
+        top: 10px;
+        width:min(var(--max), calc(100% - 16px));
+        padding:8px 9px;
+      }
+      .nav-inner{
+        grid-template-columns:minmax(46px, .9fr) auto minmax(104px, 1fr);
+        gap:8px;
+      }
       .brand{ min-width: unset; }
-      .nav{ top: 10px; }
+      .brand .name{ display:none; }
+      .nav-center .back-btn{
+        min-width:82px;
+        min-height:38px;
+        padding-inline:14px;
+        font-size:13px;
+      }
+      .nav-cta .primary{
+        min-height:38px;
+        padding-inline:10px;
+        font-size:12.4px;
+      }
 
       .brand .avatar{
         border: 0;
@@ -368,13 +427,13 @@
       <!-- logo klika i prowadzi do góry tej podstrony -->
       <a class="brand" href="index.html" aria-label="Do góry">
         <div class="avatar" title="Lumocut">
-          <img id="brandLogo" src="assets/logo.png" alt="Lumocut">
+          <img id="brandLogo" src="logo.png" alt="Lumocut">
         </div>
         <div class="name">Lumocut</div>
       </a>
 
-      <!-- linki prowadzą na stronę główną do sekcji -->
-      <div class="nav-links" aria-label="Nawigacja">
+      <div class="nav-center">
+        <a class="btn back-btn" href="index.html">Wróć</a>
       </div>
 
       <div class="nav-cta">
@@ -516,7 +575,7 @@
     // Logo fallback (różne rozszerzenia) - tak samo jak na głównej
     (function(){
       const img = document.getElementById('brandLogo');
-      const tries = ["assets/logo.png", "assets/logo.svg", "assets/logo.webp", "assets/logo.jpg", "assets/logo.jpeg"];
+      const tries = ["logo.png", "logo.svg", "logo.webp", "logo.jpg", "logo.jpeg"];
       let i = 0;
 
       function tryNext(){
