@@ -5990,6 +5990,7 @@
         if(nav){
           if(window.scrollY > 16) nav.classList.add('nav--scrolled');
 
+
           else nav.classList.remove('nav--scrolled');
         }
         ticking = false;
@@ -13978,14 +13979,23 @@
       const oldVideo = card.getAttribute('data-video');
       const oldTitle = card.getAttribute('data-title');
       const oldPoster = card.getAttribute('data-poster');
+      const oldVimeoId = card.getAttribute('data-vimeo-id');
+      const oldVimeoAspect = card.getAttribute('data-vimeo-aspect');
+      const oldVimeoOrientation = card.getAttribute('data-vimeo-orientation');
       card.setAttribute('data-video', src);
       card.setAttribute('data-title', titleText || 'Podgląd stylu');
       if(thumbBase) card.setAttribute('data-poster', posterCandidate(thumbBase));
+      card.removeAttribute('data-vimeo-id');
+      card.removeAttribute('data-vimeo-aspect');
+      card.removeAttribute('data-vimeo-orientation');
       window.openWorkCardByIndex(cards.indexOf(card));
       window.setTimeout(function(){
         if(oldVideo === null) card.removeAttribute('data-video'); else card.setAttribute('data-video', oldVideo);
         if(oldTitle === null) card.removeAttribute('data-title'); else card.setAttribute('data-title', oldTitle);
         if(oldPoster === null) card.removeAttribute('data-poster'); else card.setAttribute('data-poster', oldPoster);
+        if(oldVimeoId === null) card.removeAttribute('data-vimeo-id'); else card.setAttribute('data-vimeo-id', oldVimeoId);
+        if(oldVimeoAspect === null) card.removeAttribute('data-vimeo-aspect'); else card.setAttribute('data-vimeo-aspect', oldVimeoAspect);
+        if(oldVimeoOrientation === null) card.removeAttribute('data-vimeo-orientation'); else card.setAttribute('data-vimeo-orientation', oldVimeoOrientation);
       }, 220);
     }, 80);
   }
